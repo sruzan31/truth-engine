@@ -1,1 +1,776 @@
-[]
+[
+  {
+    "scan_id": "52f3f41e-9318-43dc-8908-0ac9a079e69a",
+    "scan_type": "url",
+    "target": "https://paypal-update-verification.com/secure/login",
+    "trust_score": 39.5,
+    "risk_level": "high",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "Suspicious layout: Domain contains highly-targeted brand/trust terms: update, paypal; Contains hyphens in host domain name, which is common in spoofing",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 60.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 14 engines flagged this URL as Phishing/Malicious.",
+        "status": "danger",
+        "weight": 0.25,
+        "score": 10.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is listed on threat database for PHISHING.",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 0.0
+      }
+    ],
+    "created_at": "2026-07-17T14:15:49.456384Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "0e0525ef-9a1a-407b-b10d-967ac0e6dfd0",
+    "scan_type": "text",
+    "target": "CONGRATULATIONS! You have won a $500 gift card. Click here NOW to claim your prize before it expires...",
+    "trust_score": 50.0,
+    "risk_level": "medium",
+    "confidence_score": 75.0,
+    "reasoning": "This text contains text-based scam markers: financial lure incentives, high urgency ('claim now'), and short-form obfuscated link shortcuts. This is typical of SMiShing (SMS Phishing) patterns targeting wallet credential harvesting.",
+    "recommendation": "Ignore the message and block the sender. Avoid clicking any link provided in unsolicited messages.",
+    "evidence": [
+      {
+        "category": "AI Analysis",
+        "title": "Semantic Analysis",
+        "description": "Text content analysis completed.",
+        "status": "warning",
+        "weight": 1.0,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T14:16:07.024522Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "a7652c26-a713-4551-949c-0adb5c29df0c",
+    "scan_type": "email",
+    "target": "Email: Urgent: Your bank account is locked! (Sender: security@paypal-alerts.gmail.com)",
+    "trust_score": 62.5,
+    "risk_level": "medium",
+    "confidence_score": 85.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Reputation",
+        "title": "Private/Custom Domain Sender",
+        "description": "The email originates from a private domain: @paypal-alerts.gmail.com.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 95.0
+      },
+      {
+        "category": "Security",
+        "title": "Email Hyperlinks Analysis",
+        "description": "High-risk links detected: Contains raw IP address URLs; Links point to hosts with suspicious security/credential tags",
+        "status": "danger",
+        "weight": 0.25,
+        "score": 55.0
+      },
+      {
+        "category": "AI Analysis",
+        "title": "AI Language Semantics",
+        "description": "AI analysis completed.",
+        "status": "warning",
+        "weight": 0.5,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T14:18:44.036785Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "80c5a963-a988-426b-9bac-dbc856bc2b77",
+    "scan_type": "url",
+    "target": "http://paypal-secure-update.phish-scam.com/login",
+    "trust_score": 24.5,
+    "risk_level": "critical",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "Unencrypted HTTP Connection",
+        "description": "The website uses HTTP. Traffic can be intercepted, read, or modified by attackers.",
+        "status": "danger",
+        "weight": 0.15,
+        "score": 20.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "Suspicious layout: Domain contains highly-targeted brand/trust terms: secure, update, paypal; Contains hyphens in host domain name, which is common in spoofing",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 45.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 14 engines flagged this URL as Phishing/Malicious.",
+        "status": "danger",
+        "weight": 0.25,
+        "score": 10.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is listed on threat database for PHISHING.",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 0.0
+      }
+    ],
+    "created_at": "2026-07-17T14:22:10.250653Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "30aaf6dc-8f42-4193-830c-b090169ac559",
+    "scan_type": "url",
+    "target": "https://google.com",
+    "trust_score": 100.0,
+    "risk_level": "low",
+    "confidence_score": 90.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Registration Age",
+        "description": "Domain is established. Registration age is 10532 days (approx. 28 years).",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T14:22:14.438417Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "b8dc263a-ca8c-4d79-a8d2-9627cbd351e6",
+    "scan_type": "text",
+    "target": "CONGRATULATIONS! You've been selected to receive a $1000 Amazon gift card. Click here NOW to claim y...",
+    "trust_score": 50.0,
+    "risk_level": "medium",
+    "confidence_score": 75.0,
+    "reasoning": "This text contains text-based scam markers: financial lure incentives, high urgency ('claim now'), and short-form obfuscated link shortcuts. This is typical of SMiShing (SMS Phishing) patterns targeting wallet credential harvesting.",
+    "recommendation": "Ignore the message and block the sender. Avoid clicking any link provided in unsolicited messages.",
+    "evidence": [
+      {
+        "category": "AI Analysis",
+        "title": "Semantic Analysis",
+        "description": "Text content analysis completed.",
+        "status": "warning",
+        "weight": 1.0,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T14:22:14.443407Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "861694bb-6f8c-4576-96a0-4a2c9909835b",
+    "scan_type": "email",
+    "target": "Email: \u26a0\ufe0f Urgent: Your account will be DELETED in 24 hours! (Sender: security-noreply@gmail.com)",
+    "trust_score": 53.8,
+    "risk_level": "medium",
+    "confidence_score": 85.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Reputation",
+        "title": "Public/Free Email Sender",
+        "description": "The email is sent from a public freemail domain (gmail.com). Official correspondence from banks, governments, or enterprises never arrives from public addresses.",
+        "status": "warning",
+        "weight": 0.25,
+        "score": 60.0
+      },
+      {
+        "category": "Security",
+        "title": "Email Hyperlinks Analysis",
+        "description": "High-risk links detected: Contains raw IP address URLs; Links point to hosts with suspicious security/credential tags",
+        "status": "danger",
+        "weight": 0.25,
+        "score": 55.0
+      },
+      {
+        "category": "AI Analysis",
+        "title": "AI Language Semantics",
+        "description": "AI analysis completed.",
+        "status": "warning",
+        "weight": 0.5,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T14:22:14.447652Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "71ab021c-728a-400b-80f4-9d01c9a4c5f4",
+    "scan_type": "url",
+    "target": "https://arnazon-secure-login.com",
+    "trust_score": 82.0,
+    "risk_level": "low",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "Suspicious layout: Domain contains highly-targeted brand/trust terms: secure, login; Contains hyphens in host domain name, which is common in spoofing",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 60.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T14:25:54.237250Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "a273cf8f-0858-440c-a385-b6806dfc6caf",
+    "scan_type": "url",
+    "target": "https://google.com",
+    "trust_score": 100.0,
+    "risk_level": "low",
+    "confidence_score": 90.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Registration Age",
+        "description": "Domain is established. Registration age is 10532 days (approx. 28 years).",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T14:29:49.233987Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "7c3dd307-aecb-4224-b36c-d969cb579934",
+    "scan_type": "url",
+    "target": "https://google.com",
+    "trust_score": 100.0,
+    "risk_level": "low",
+    "confidence_score": 90.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Registration Age",
+        "description": "Domain is established. Registration age is 10532 days (approx. 28 years).",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T14:32:18.185228Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "d68f4417-1a95-4a5e-85f6-344efcc4a780",
+    "scan_type": "url",
+    "target": "https://accounts-google.com.verify-secure.info",
+    "trust_score": 78.0,
+    "risk_level": "medium",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "Suspicious layout: Domain contains highly-targeted brand/trust terms: verify, secure; Abnormal level of subdomains (subdomain inflation / camouflage); Contains hyphens in host domain name, which is common in spoofing",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 40.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T14:33:01.572933Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "3999dcd8-98eb-48c7-9c86-c439097d9b23",
+    "scan_type": "url",
+    "target": "https://accounts-google.com.verify-secure.info",
+    "trust_score": 78.0,
+    "risk_level": "medium",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "Suspicious layout: Domain contains highly-targeted brand/trust terms: verify, secure; Abnormal level of subdomains (subdomain inflation / camouflage); Contains hyphens in host domain name, which is common in spoofing",
+        "status": "danger",
+        "weight": 0.2,
+        "score": 40.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T17:48:13.043751Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "5b975a6b-2a09-4024-bf32-46c2f073eb5d",
+    "scan_type": "url",
+    "target": "https://www.google.com/?zx=1784310531718",
+    "trust_score": 100.0,
+    "risk_level": "low",
+    "confidence_score": 90.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Registration Age",
+        "description": "Domain is established. Registration age is 10532 days (approx. 28 years).",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T17:49:03.458865Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "acfc22ac-e952-418c-b9d8-d8065b719ceb",
+    "scan_type": "email",
+    "target": "Email: project submission (Sender: HR Labmentix)",
+    "trust_score": 55.0,
+    "risk_level": "medium",
+    "confidence_score": 85.0,
+    "reasoning": "The email content appears benign and shows standard conversational/professional structure. There are no patterns of coercive urgency, phishing links, or suspicious formatting.",
+    "recommendation": "This email is likely safe to read. Handle normal actions as requested, but verify any external links manually before clicking.",
+    "evidence": [
+      {
+        "category": "Reputation",
+        "title": "Invalid Sender Email Format",
+        "description": "The sender format 'HR Labmentix' appears structurally invalid.",
+        "status": "danger",
+        "weight": 0.25,
+        "score": 20.0
+      },
+      {
+        "category": "Security",
+        "title": "Zero Embedded Links",
+        "description": "No hyperlinks detected inside the email body.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "AI Analysis",
+        "title": "AI Language Semantics",
+        "description": "AI analysis completed.",
+        "status": "warning",
+        "weight": 0.5,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T17:58:44.216131Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "b353c329-bb7a-4a3b-9e27-7280377e0670",
+    "scan_type": "url",
+    "target": "inamigoes",
+    "trust_score": 90.0,
+    "risk_level": "low",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T18:03:19.926322Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "77db290c-2140-49c9-a516-a55123e86400",
+    "scan_type": "url",
+    "target": "busibud",
+    "trust_score": 90.0,
+    "risk_level": "low",
+    "confidence_score": 84.0,
+    "reasoning": "The URL exhibits classical characteristics of a high-risk credential harvesting phishing page. It features a recently registered domain name, lacks reputable institutional ownership, and uses an obfuscated path structure mimicking standard payment processors. Additionally, heuristic detection indicates abnormal form structures intended to collect user credentials without appropriate OAuth implementations.",
+    "recommendation": "Do NOT visit this URL. If you have already entered credentials, immediately change your passwords on the legitimate service and enable Multi-Factor Authentication (MFA).",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Age (WHOIS Lookup)",
+        "description": "Unable to verify domain age via public WHOIS queries. Status unconfirmed.",
+        "status": "info",
+        "weight": 0.2,
+        "score": 50.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-07-17T18:04:21.007319Z",
+    "user_id": null
+  },
+  {
+    "scan_id": "de1a7ef1-ceeb-4af2-afcf-b015bb26c174",
+    "scan_type": "text",
+    "target": "\ud83c\udf89 Congratulations! Your mobile number has won \u20b925,00,000 in the Lucky Draw. Claim your prize by payi...",
+    "trust_score": 50.0,
+    "risk_level": "medium",
+    "confidence_score": 75.0,
+    "reasoning": "This text contains text-based scam markers: financial lure incentives, high urgency ('claim now'), and short-form obfuscated link shortcuts. This is typical of SMiShing (SMS Phishing) patterns targeting wallet credential harvesting.",
+    "recommendation": "Ignore the message and block the sender. Avoid clicking any link provided in unsolicited messages.",
+    "evidence": [
+      {
+        "category": "AI Analysis",
+        "title": "Semantic Analysis",
+        "description": "Text content analysis completed.",
+        "status": "warning",
+        "weight": 1.0,
+        "score": 50.0
+      }
+    ],
+    "created_at": "2026-07-17T18:07:34.050363Z",
+    "user_id": null
+  }
+]

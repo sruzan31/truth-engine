@@ -34,7 +34,7 @@ class EmailAnalyzer(BaseAnalyzer):
         evidence.append(links_evidence)
         
         # 3. AI Scam Language Analysis
-        scam_evidence = self._check_scam_language(subject, body, headers)
+        scam_evidence = self._check_scam_language(subject, body, headers, sender)
         evidence.append(scam_evidence)
         
         return evidence
@@ -143,12 +143,12 @@ class EmailAnalyzer(BaseAnalyzer):
             score=score
         )
         
-    def _check_scam_language(self, subject: str, body: str, headers: str) -> EvidenceItem:
+    def _check_scam_language(self, subject: str, body: str, headers: str, sender: str = "") -> EvidenceItem:
         prompt = f"""
 Analyze the following email details for scam patterns, threat levels, emotional coercion, and phishing indicators.
 
 Subject: {subject}
-Sender: {kwargs.get('sender', 'Unknown')}
+Sender: {sender or 'Unknown'}
 Headers: {headers}
 Email Body:
 ---
