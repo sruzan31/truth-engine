@@ -2,9 +2,14 @@ import logging
 import io
 from PIL import Image
 from typing import List
-from backend.app.analyzers.base import BaseAnalyzer
-from backend.app.analyzers.url_analyzer import UrlAnalyzer
-from backend.app.models.schemas import EvidenceItem
+try:
+    from app.analyzers.base import BaseAnalyzer
+    from app.analyzers.url_analyzer import UrlAnalyzer
+    from app.models.schemas import EvidenceItem
+except ImportError:
+    from backend.app.analyzers.base import BaseAnalyzer
+    from backend.app.analyzers.url_analyzer import UrlAnalyzer
+    from backend.app.models.schemas import EvidenceItem
 
 logger = logging.getLogger("uvicorn")
 
@@ -26,7 +31,6 @@ class QrAnalyzer(BaseAnalyzer):
             )]
             
         decoded_text = None
-        
         try:
             from pyzbar.pyzbar import decode
             decoded_objects = decode(image)
@@ -36,8 +40,6 @@ class QrAnalyzer(BaseAnalyzer):
             logger.warning(f"pyzbar decoding failed in QR Analyzer: {e}")
             
         if not decoded_text:
-            # If pyzbar fails or returns nothing, we can try to fall back to Gemini's visual QR recognition
-            # but as a fail-safe heuristic, check if a text-based input was passed as target
             return [EvidenceItem(
                 category="Security",
                 title="QR Code Scan Error",
@@ -47,7 +49,6 @@ class QrAnalyzer(BaseAnalyzer):
                 score=50.0
             )]
             
-        # Add QR scan success evidence
         evidence.append(EvidenceItem(
             category="Security",
             title="QR Code Decoded",
@@ -57,7 +58,6 @@ class QrAnalyzer(BaseAnalyzer):
             score=100.0
         ))
         
-        # Check if the QR payload is a URL
         is_url = decoded_text.startswith(("http://", "https://", "www.")) or (
             "." in decoded_text and "/" in decoded_text and not " " in decoded_text
         )
@@ -71,13 +71,10 @@ class QrAnalyzer(BaseAnalyzer):
             url_scanner = UrlAnalyzer()
             url_evidence = url_scanner.analyze(clean_url)
             
-            # Merge URL evidence with the QR code metadata
-            # Adjust weights to account for QR shell
             for item in url_evidence:
-                item.weight = item.weight * 0.80  # Scale down slightly to keep total weight close to 1.0
+                item.weight = item.weight * 0.80
                 evidence.append(item)
         else:
-            # QR code contains non-URL plain text, evaluate as text
             logger.info(f"QR payload recognized as plain text: {decoded_text}")
             evidence.append(EvidenceItem(
                 category="AI Analysis",

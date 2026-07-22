@@ -3,192 +3,114 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Shield, LayoutDashboard, History, Info, Settings, Search, Menu, X, LogIn, LogOut, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { Shield, Settings, User, ArrowUpRight, Search, Activity, History, Info } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
-  // Mock Firebase Authentication state
-  const [user, setUser] = useState<{ email: string; uid: string } | null>(null);
 
   useEffect(() => {
-    // Read mock user from localStorage if any
-    const savedUser = localStorage.getItem('truth_engine_user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 12);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLoginToggle = () => {
-    if (user) {
-      localStorage.removeItem('truth_engine_user');
-      setUser(null);
-    } else {
-      const mockUser = { email: 'sec-analyst@truthengine.ai', uid: 'usr_mock_12345' };
-      localStorage.setItem('truth_engine_user', JSON.stringify(mockUser));
-      setUser(mockUser);
-    }
-  };
-
   const navItems = [
-    { label: 'Verify Console', href: '/analyze', icon: Search },
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'History log', href: '/history', icon: History },
-    { label: 'Engine details', href: '/about', icon: Info },
-    { label: 'Settings', href: '/settings', icon: Settings },
+    { label: 'Overview', href: '/', icon: Activity },
+    { label: 'Analyze', href: '/analyze', icon: Search },
+    { label: 'Dashboard', href: '/dashboard', icon: Shield },
+    { label: 'History', href: '/history', icon: History },
+    { label: 'Architecture', href: '/about', icon: Info },
   ];
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300 border-b',
-        scrolled
-          ? 'bg-black/70 backdrop-blur-md border-white/10'
-          : 'bg-transparent border-transparent'
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo Branding */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-secondary p-0.5 shadow-lg shadow-primary/20">
-                <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-bg-dark">
-                  <Shield className="h-5.5 w-5.5 text-primary group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-tr from-primary to-secondary opacity-0 blur group-hover:opacity-40 transition duration-500" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white group-hover:text-primary transition-colors duration-300">
-                THE TRUTH ENGINE
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-3 transition-all duration-300 pointer-events-none">
+      <div className="max-w-[1280px] mx-auto flex items-center justify-between">
+        {/* Floating Bar Container */}
+        <div
+          className={`w-full flex items-center justify-between px-5 py-2.5 rounded-full pointer-events-auto transition-all duration-300 ${
+            scrolled
+              ? 'bg-white/90 backdrop-blur-xl border border-[#E8E8E8] shadow-[0_4px_24px_rgba(0,0,0,0.06)]'
+              : 'bg-white/80 backdrop-blur-md border border-[#E8E8E8]/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
+          }`}
+        >
+          {/* Logo Section */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white transition-transform duration-200 group-hover:scale-105">
+              <Shield className="w-4 h-4 text-white stroke-[2.2]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold tracking-tight text-[#111111]">
+                Truth Engine
               </span>
-            </Link>
-          </div>
+              <span className="text-[10px] font-mono tracking-widest text-[#999999] uppercase -mt-0.5">
+                Enterprise
+              </span>
+            </div>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          {/* Navigation Centered */}
+          <nav className="hidden md:flex items-center gap-1 bg-[#F6F6F7] p-1 rounded-full border border-[#E8E8E8]/60">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300',
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  )}
+                      ? 'text-[#111111] font-semibold'
+                      : 'text-[#666666] hover:text-[#111111]'
+                  }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activePill"
+                      className="absolute inset-0 bg-white rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-[#E8E8E8]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <item.icon className="w-3.5 h-3.5 stroke-[1.8]" />
+                    {item.label}
+                  </span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Auth Trigger */}
-          <div className="hidden md:flex items-center gap-4">
-            {user ? (
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                <div className="h-6 w-6 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
-                  <User className="h-3.5 w-3.5" />
-                </div>
-                <span className="text-xs text-gray-300 font-mono truncate max-w-[120px]">
-                  {user.email.split('@')[0]}
-                </span>
-                <button
-                  onClick={handleLoginToggle}
-                  className="text-gray-400 hover:text-danger hover:scale-105 transition-all cursor-pointer"
-                  title="Logout"
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={handleLoginToggle}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-primary to-secondary hover:brightness-110 active:scale-95 shadow-md shadow-primary/10 cursor-pointer text-white transition-all"
-              >
-                <LogIn className="h-4 w-4" />
-                Sign In
-              </button>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-400 hover:text-white cursor-pointer"
+          {/* Right Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/analyze"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#111111] hover:bg-black text-white text-xs font-medium transition-all duration-200 shadow-xs hover:shadow-sm hover:scale-[1.02] active:scale-[0.98]"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <span>Analyze Content</span>
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2]" />
+            </Link>
+
+            <div className="h-4 w-[1px] bg-[#E8E8E8] hidden sm:block" />
+
+            <Link
+              href="/settings"
+              className="p-2 rounded-full text-[#666666] hover:text-[#111111] hover:bg-[#F6F6F7] transition-colors border border-transparent hover:border-[#E8E8E8]"
+              title="Settings"
+            >
+              <Settings className="w-4 h-4 stroke-[1.8]" />
+            </Link>
+
+            <button
+              className="w-8 h-8 rounded-full bg-[#F6F6F7] border border-[#E8E8E8] flex items-center justify-center text-[#111111] hover:bg-[#E8E8E8] transition-colors"
+              title="User Workspace"
+            >
+              <User className="w-4 h-4 stroke-[1.8]" />
             </button>
           </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden glass-panel border-x-0 border-b border-white/10 px-4 pt-2 pb-4 space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={cn(
-                  'flex items-center gap-3 px-4 py-2.5 rounded-lg text-base font-medium transition-all',
-                  isActive
-                    ? 'bg-primary/15 text-primary'
-                    : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                )}
-              >
-                <Icon className="h-5 w-5" />
-                {item.label}
-              </Link>
-            );
-          })}
-          <div className="border-t border-white/10 pt-3 flex items-center justify-between">
-            {user ? (
-              <div className="flex items-center justify-between w-full">
-                <span className="text-sm font-mono text-gray-400">{user.email}</span>
-                <button
-                  onClick={() => {
-                    handleLoginToggle();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center gap-2 text-danger text-sm hover:underline font-semibold"
-                >
-                  <LogOut className="h-4 w-4" /> Log Out
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  handleLoginToggle();
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-white"
-              >
-                <LogIn className="h-4 w-4" />
-                Sign In
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </header>
   );
 }

@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Settings, Shield, Key, Eye, HelpCircle, AlertTriangle, CheckCircle, Database } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Settings, Key, Database, AlertTriangle, CheckCircle2, Shield } from 'lucide-react';
 
 export default function SettingsPage() {
   const [serverStatus, setServerStatus] = useState<{
@@ -14,7 +13,7 @@ export default function SettingsPage() {
       mongodb: boolean;
     };
   } | null>(null);
-  
+
   const [loading, setLoading] = useState(true);
   const [cleared, setCleared] = useState(false);
 
@@ -27,7 +26,7 @@ export default function SettingsPage() {
           setServerStatus(data);
         }
       } catch (err) {
-        console.error('Could not connect to FastAPI server:', err);
+        console.error('Could not connect to backend server:', err);
       } finally {
         setLoading(false);
       }
@@ -42,104 +41,110 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex-grow max-w-3xl mx-auto w-full space-y-8 py-4">
-      {/* Title Header */}
-      <div className="flex items-center gap-2.5 border-b border-white/5 pb-4">
-        <div className="bg-primary/10 border border-primary/20 p-1.5 rounded-lg">
-          <Settings className="h-5 w-5 text-primary" />
+    <div className="max-w-3xl mx-auto space-y-8 py-4">
+      {/* Header */}
+      <div className="space-y-1 border-b border-[#E8E8E8] pb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono text-[#111111]">
+          <Settings className="w-3.5 h-3.5" />
+          <span>CONFIGURATION</span>
         </div>
-        <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Configuration Settings</h1>
-          <p className="text-xs text-gray-400">Manage security settings, API connections, and user data cache.</p>
-        </div>
+        <h1 className="text-3xl font-extrabold text-[#111111] tracking-tight">
+          System Settings & API Telemetry
+        </h1>
+        <p className="text-xs text-[#666666]">
+          Manage security integrations, engine status, and local session storage.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
-        {/* API Credentials and Engine Status */}
-        <div className="glass-panel rounded-2xl p-6 space-y-4">
-          <h3 className="font-bold text-white text-base tracking-wide flex items-center gap-2">
-            <Key className="h-4.5 w-4.5 text-primary" /> Core Trust Intelligence Status
-          </h3>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            The Truth Engine operates in <strong className="text-white">Hybrid Mode</strong>. If third-party keys are not found in the environment (`.env`), the backend automatically routes requests to simulated analyzers utilizing offline deterministic models.
+      <div className="space-y-6">
+        {/* Core Status Card */}
+        <div className="truth-card p-6 bg-[#FFFFFF] border border-[#E8E8E8] rounded-2xl space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E8E8E8] pb-3">
+            <h3 className="text-xs font-mono font-bold uppercase text-[#111111]">
+              Threat Intelligence Engine Status
+            </h3>
+            <span className="text-[10px] font-mono text-[#999999]">HYBRID ARCHITECTURE</span>
+          </div>
+
+          <p className="text-xs text-[#666666] leading-relaxed">
+            Truth Engine automatically routes verification requests through live APIs or offline deterministic models based on environment configurations.
           </p>
 
-          <div className="border-t border-white/5 pt-4 space-y-3.5">
+          <div className="pt-2">
             {loading ? (
-              <p className="text-xs text-gray-500 font-mono animate-pulse">Checking API statuses...</p>
+              <p className="text-xs text-[#999999] font-mono animate-pulse">Checking node connectivity...</p>
             ) : serverStatus ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   {
                     name: 'Google Gemini 2.5 API',
                     mock: serverStatus.mock_mode.gemini,
-                    desc: 'Drives explainable AI summaries and language scam parsing.',
+                    desc: 'Explainable AI summaries & synthetic language forensics.',
                   },
                   {
                     name: 'VirusTotal Threat Intel',
                     mock: serverStatus.mock_mode.virustotal,
-                    desc: 'Searches public URL and domain reputation lists.',
+                    desc: 'Public URL & malware domain blacklists.',
                   },
                   {
                     name: 'Google Safe Browsing API',
                     mock: serverStatus.mock_mode.safebrowsing,
-                    desc: 'Scans URLs for registered phishing/malware listings.',
+                    desc: 'Phishing domain database cross-referencing.',
                   },
                   {
-                    name: 'MongoDB Atlas Integration',
+                    name: 'MongoDB Atlas Storage',
                     mock: serverStatus.mock_mode.mongodb,
-                    desc: 'Persists user scans, dashboards, and audit history logs.',
+                    desc: 'Persists user scans and security audit logs.',
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="border border-white/5 bg-black/20 rounded-xl p-3.5 space-y-2">
+                  <div key={idx} className="p-3.5 rounded-xl bg-[#FAFAFA] border border-[#E8E8E8] space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">{item.name}</span>
+                      <span className="text-xs font-bold text-[#111111]">{item.name}</span>
                       {item.mock ? (
-                        <span className="text-[9px] font-bold font-mono tracking-wide uppercase px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                          Offline / Mocked
+                        <span className="px-2 py-0.5 rounded-full bg-[#FFF8E1] text-[#C08400] text-[9px] font-mono font-bold uppercase border border-[#FFE082]">
+                          OFFLINE / SIMULATED
                         </span>
                       ) : (
-                        <span className="text-[9px] font-bold font-mono tracking-wide uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          Active / Live
+                        <span className="px-2 py-0.5 rounded-full bg-[#E8F5E9] text-[#1F7A3E] text-[9px] font-mono font-bold uppercase border border-[#C8E6C9]">
+                          ACTIVE / LIVE
                         </span>
                       )}
                     </div>
-                    <p className="text-[10px] text-gray-400 leading-normal">{item.desc}</p>
+                    <p className="text-[10px] text-[#666666] leading-normal">{item.desc}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="border border-rose-500/20 bg-rose-500/5 rounded-xl p-4 flex gap-3 items-center">
-                <AlertTriangle className="h-5 w-5 text-rose-500 shrink-0" />
-                <p className="text-xs text-gray-400 leading-normal">
-                  Failed to connect to the FastAPI backend. Make sure the server is active on <code className="text-white font-mono">http://localhost:8000</code>.
-                </p>
+              <div className="p-4 rounded-xl bg-[#FFEBEE] border border-[#FFCDD2] text-[#C62828] text-xs flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>Backend offline. Ensure FastAPI is running on http://localhost:8000.</span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Clear Data & Security Panels */}
-        <div className="glass-panel rounded-2xl p-6 space-y-4">
-          <h3 className="font-bold text-white text-base tracking-wide flex items-center gap-2">
-            <Database className="h-4.5 w-4.5 text-primary" /> Browser Session Cache
-          </h3>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            Verify metrics, credentials tokens, and local cache entries are maintained exclusively inside your browser storage for safety.
-          </p>
+        {/* Local Session Card */}
+        <div className="truth-card p-6 bg-[#FFFFFF] border border-[#E8E8E8] rounded-2xl space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E8E8E8] pb-3">
+            <h3 className="text-xs font-mono font-bold uppercase text-[#111111]">
+              Browser Cache & Session Purge
+            </h3>
+          </div>
 
-          <div className="border-t border-white/5 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h4 className="font-bold text-white text-xs tracking-wide">Purge Local Configuration</h4>
-              <p className="text-[10px] text-gray-500 max-w-sm leading-normal">
-                Resets local mock authentication state and browser metadata settings. This will NOT clear server records stored in MongoDB Atlas.
+              <h4 className="text-xs font-bold text-[#111111]">Clear Local Session Tokens</h4>
+              <p className="text-[11px] text-[#666666]">
+                Removes local browser preferences and cached scan IDs. Server data remains intact.
               </p>
             </div>
+
             <button
               onClick={handleClearHistory}
-              className="px-4 py-2 bg-rose-600/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer"
+              type="button"
+              className="px-4 py-2 rounded-full bg-[#FFEBEE] hover:bg-[#FFCDD2] text-[#C62828] text-xs font-semibold transition-all shrink-0"
             >
-              {cleared ? 'Cleared!' : 'Purge Cache'}
+              {cleared ? 'Cache Cleared' : 'Purge Browser Cache'}
             </button>
           </div>
         </div>

@@ -2,11 +2,24 @@
 
 import React, { use, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ShieldCheck, ShieldAlert, ArrowLeft, RefreshCw, AlertCircle, FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  ShieldCheck,
+  ShieldAlert,
+  ArrowLeft,
+  FileText,
+  AlertCircle,
+  Share2,
+  Download,
+  Clock,
+  CheckCircle2,
+  Globe,
+} from 'lucide-react';
 import TrustGauge from '@/components/TrustGauge';
 import EvidencePanel from '@/components/EvidencePanel';
 import RecommendationCard from '@/components/RecommendationCard';
+import RiskTimeline from '@/components/RiskTimeline';
+import Skeleton from '@/components/Skeleton';
 import apiService from '@/services/api';
 import { AnalysisResult } from '@/types';
 import { formatDate } from '@/lib/utils';
@@ -16,7 +29,6 @@ interface ResultsPageProps {
 }
 
 export default function ResultsPage({ params }: ResultsPageProps) {
-  const router = useRouter();
   const resolvedParams = use(params);
   const scanId = resolvedParams.id;
 
@@ -32,7 +44,7 @@ export default function ResultsPage({ params }: ResultsPageProps) {
         setScan(report);
       } catch (err: any) {
         console.error(err);
-        setError('Failed to load scan report. The record may have expired or does not exist.');
+        setError('Failed to load security scan report. Record may have expired.');
       } finally {
         setLoading(false);
       }
@@ -43,32 +55,45 @@ export default function ResultsPage({ params }: ResultsPageProps) {
 
   const handleDownloadPdf = () => {
     if (typeof window !== 'undefined') {
-      window.print(); // Uses standard print dialog, which allows saving as PDF
+      window.print();
     }
   };
 
   if (loading) {
     return (
-      <div className="flex-grow flex flex-col items-center justify-center py-20 space-y-3">
-        <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-        <p className="text-sm text-gray-400 font-mono uppercase tracking-widest">Loading Trust Verdict...</p>
+      <div className="space-y-6 py-6 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-6 w-48" />
+        </div>
+        <Skeleton className="h-20 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 space-y-6">
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-48 w-full" />
+          </div>
+          <div className="lg:col-span-7 space-y-6">
+            <Skeleton className="h-96 w-full" />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error || !scan) {
     return (
-      <div className="flex-grow flex items-center justify-center py-16">
-        <div className="max-w-md w-full glass-panel rounded-3xl p-6 text-center space-y-4">
-          <AlertCircle className="h-10 w-10 text-rose-500 mx-auto" />
-          <h3 className="text-lg font-bold text-white">Report Unobtainable</h3>
-          <p className="text-xs text-gray-400 leading-relaxed">{error || 'Unable to locate report.'}</p>
+      <div className="py-20 flex items-center justify-center">
+        <div className="truth-card p-8 max-w-md w-full text-center space-y-4">
+          <AlertCircle className="w-10 h-10 text-[#C62828] mx-auto" />
+          <h3 className="text-lg font-bold text-[#111111]">Report Not Available</h3>
+          <p className="text-xs text-[#666666] leading-relaxed">{error || 'Scan record not found.'}</p>
           <div className="pt-2">
             <Link
               href="/analyze"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-all"
+              className="px-5 py-2.5 rounded-full bg-[#111111] text-white text-xs font-semibold inline-flex items-center gap-2"
             >
-              <ArrowLeft className="h-4 w-4" /> Back to Console
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Console</span>
             </Link>
           </div>
         </div>
@@ -77,57 +102,60 @@ export default function ResultsPage({ params }: ResultsPageProps) {
   }
 
   return (
-    <div className="flex-grow space-y-6 py-4 print:p-0 print:bg-black">
-      {/* Back link & Title */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-4 print:hidden">
+    <div className="space-y-6 py-4 print:p-0 print:bg-white">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E8E8E8] pb-4 print:hidden">
         <div className="space-y-1">
           <Link
             href="/analyze"
-            className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-primary transition-colors font-medium mb-1"
+            className="inline-flex items-center gap-1.5 text-xs text-[#666666] hover:text-[#111111] transition-colors font-medium mb-1"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Verify Console
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Console
           </Link>
           <div className="flex items-center gap-2.5">
-            <div className="bg-primary/10 border border-primary/20 p-1.5 rounded-lg">
-              <FileText className="h-4.5 w-4.5 text-primary" />
+            <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white">
+              <FileText className="w-4 h-4" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-              Safety Assessment Report
+            <h1 className="text-2xl font-extrabold text-[#111111] tracking-tight">
+              Enterprise Trust Audit Report
             </h1>
           </div>
         </div>
 
-        <div className="text-right text-[10px] sm:text-xs text-gray-500 font-mono leading-relaxed">
-          <span>SCAN ID: {scan.scan_id}</span>
-          <br />
-          <span>DATE: {formatDate(scan.created_at)}</span>
+        <div className="text-right text-xs font-mono text-[#666666] space-y-0.5">
+          <div>SCAN ID: <span className="text-[#111111] font-bold">{scan.scan_id}</span></div>
+          <div>TIMESTAMP: <span>{formatDate(scan.created_at)}</span></div>
         </div>
       </div>
 
-      {/* Target Title Banner */}
-      <div className="glass-panel rounded-2xl p-4 sm:p-5 flex items-center justify-between border border-white/10 relative overflow-hidden">
-        <div className="space-y-1 max-w-[70%] sm:max-w-[80%]">
-          <span className="text-[10px] font-bold font-mono tracking-widest text-primary uppercase">
-            TARGET {scan.scan_type} CONTENT
+      {/* Target Info Banner */}
+      <div className="truth-card p-5 bg-[#FFFFFF] border border-[#E8E8E8] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="space-y-1 min-w-0 max-w-2xl">
+          <span className="text-[10px] font-mono font-bold text-[#999999] uppercase tracking-wider block">
+            EVALUATED {scan.scan_type.toUpperCase()} VECTOR TARGET
           </span>
-          <h2 className="text-sm sm:text-base font-extrabold text-white font-mono truncate select-all">
+          <h2 className="text-base font-bold text-[#111111] font-mono truncate select-all">
             {scan.target}
           </h2>
         </div>
-        <div className="shrink-0 flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/5 bg-black/40 text-[10px] font-bold font-mono uppercase text-gray-400">
-          <span>{scan.scan_type} Analyzer</span>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono font-semibold text-[#111111] uppercase">
+            {scan.scan_type} ANALYZER
+          </span>
         </div>
       </div>
 
-      {/* Main layout */}
+      {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column (Trust score and Recommendation actions) */}
-        <div className="lg:col-span-5 space-y-6 print:col-span-12">
+        {/* Left Column: Trust Score, Risk Level & Recommendations */}
+        <div className="lg:col-span-5 space-y-6">
           <TrustGauge
             score={scan.trust_score}
             riskLevel={scan.risk_level}
             confidence={scan.confidence_score}
           />
+
           <RecommendationCard
             reasoning={scan.reasoning}
             recommendation={scan.recommendation}
@@ -136,8 +164,9 @@ export default function ResultsPage({ params }: ResultsPageProps) {
           />
         </div>
 
-        {/* Right Column (Evidence Checklist) */}
-        <div className="lg:col-span-7 space-y-6 print:col-span-12">
+        {/* Right Column: Timeline & Evidence Findings */}
+        <div className="lg:col-span-7 space-y-6">
+          <RiskTimeline />
           <EvidencePanel evidence={scan.evidence} />
         </div>
       </div>

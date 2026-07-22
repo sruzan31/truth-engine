@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { History, RefreshCw, ShieldAlert } from 'lucide-react';
+import { History, ShieldAlert, Download } from 'lucide-react';
 import HistoryTable from '@/components/HistoryTable';
+import Skeleton from '@/components/Skeleton';
 import apiService from '@/services/api';
 import { AnalysisResult } from '@/types';
 
@@ -20,7 +21,7 @@ export default function HistoryPage() {
         setScans(data);
       } catch (err: any) {
         console.error(err);
-        setError('Failed to fetch the scan history logs.');
+        setError('Failed to fetch historical security scan records.');
       } finally {
         setLoading(false);
       }
@@ -29,37 +30,53 @@ export default function HistoryPage() {
     fetchHistory();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex-grow flex flex-col items-center justify-center py-20 space-y-3">
-        <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-        <p className="text-sm text-gray-400 font-mono uppercase tracking-widest">Loading Scan History...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex-grow space-y-6 py-4">
+    <div className="space-y-6 py-4">
       {/* Title Header */}
-      <div className="flex items-center gap-2.5 border-b border-white/5 pb-4">
-        <div className="bg-primary/10 border border-primary/20 p-1.5 rounded-lg">
-          <History className="h-5 w-5 text-primary" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E8E8E8] pb-6">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono text-[#111111]">
+            <History className="w-3.5 h-3.5" />
+            <span>AUDIT ARCHIVE</span>
+          </div>
+          <h1 className="text-3xl font-extrabold text-[#111111] tracking-tight">
+            Security Audit Archive
+          </h1>
+          <p className="text-xs text-[#666666]">
+            Immutable record of all historical content verifications and threat evaluations.
+          </p>
         </div>
-        <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Inspections Archives</h1>
-          <p className="text-xs text-gray-400">Complete historical index of website reputation audits and file checks.</p>
-        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(scans, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "truth_engine_audit_log.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+          }}
+          className="px-4 py-2 rounded-full bg-[#FFFFFF] border border-[#E8E8E8] hover:bg-[#FAFAFA] text-[#111111] text-xs font-semibold inline-flex items-center gap-2 transition-all"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span>Export Audit Log (JSON)</span>
+        </button>
       </div>
 
       {error && (
-        <div className="border border-rose-500/20 bg-rose-500/5 rounded-2xl p-4 flex gap-3 items-center">
-          <ShieldAlert className="h-5 w-5 text-rose-500 shrink-0" />
-          <p className="text-xs text-gray-400">{error}</p>
+        <div className="p-4 rounded-xl bg-[#FFEBEE] border border-[#FFCDD2] text-[#C62828] text-xs font-medium flex items-center gap-2">
+          <ShieldAlert className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
-      {/* History table wrapper */}
-      <HistoryTable scans={scans} />
+      {loading ? (
+        <Skeleton className="h-96 w-full" />
+      ) : (
+        <HistoryTable scans={scans} />
+      )}
     </div>
   );
 }

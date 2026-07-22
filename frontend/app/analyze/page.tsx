@@ -2,122 +2,109 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldAlert, Info, ShieldCheck, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, AlertCircle, ArrowLeft } from 'lucide-react';
 import UploadCard from '@/components/UploadCard';
 import ProgressTimeline from '@/components/ProgressTimeline';
-import apiService from '@/services/api';
+import { AnalysisResult } from '@/types';
 
 export default function AnalyzePage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [scanType, setScanType] = useState<'url' | 'email' | 'text' | 'image' | 'qr' | 'pdf' | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const triggerScan = async (type: typeof scanType, scanFn: () => Promise<any>) => {
-    setLoading(true);
-    setScanType(type);
-    setError(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [activeTaskName, setActiveTaskName] = useState('Initiating Trust Engine Analysis...');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
-    try {
-      // Mock delay to let the ProgressTimeline load nicely for UX
-      const [result] = await Promise.all([
-        scanFn(),
-        new Promise((resolve) => setTimeout(resolve, 4000)), // Ensure user sees timeline steps
-      ]);
-      
-      // Redirect to dynamic results page
-      router.push(`/results/${result.scan_id}`);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'An unexpected error occurred during analysis.');
-      setLoading(false);
+  const handleStart = (taskName: string) => {
+    setErrorMsg(null);
+    setActiveTaskName(taskName);
+    setIsAnalyzing(true);
+  };
+
+  const handleSuccess = (result: AnalysisResult) => {
+    setAnalysisResult(result);
+  };
+
+  const handleProgressComplete = () => {
+    if (analysisResult) {
+      router.push(`/results/${analysisResult.scan_id}`);
     }
   };
 
-  const handleAnalyzeUrl = (url: string) => {
-    triggerScan('url', () => apiService.analyzeUrl(url));
+  const handleError = (msg: string) => {
+    setIsAnalyzing(false);
+    setErrorMsg(msg);
   };
-
-  const handleAnalyzeText = (text: string) => {
-    triggerScan('text', () => apiService.analyzeText(text));
-  };
-
-  const handleAnalyzeEmail = (subject: string, body: string, sender: string, headers: string) => {
-    triggerScan('email', () => apiService.analyzeEmail(subject, body, sender, headers));
-  };
-
-  const handleAnalyzeFile = (file: File, type: 'image' | 'qr' | 'pdf') => {
-    if (type === 'image') {
-      triggerScan('image', () => apiService.analyzeImage(file));
-    } else if (type === 'qr') {
-      triggerScan('qr', () => apiService.analyzeQr(file));
-    } else {
-      triggerScan('pdf', () => apiService.analyzePdf(file));
-    }
-  };
-
-  if (loading && scanType) {
-    return (
-      <div className="flex-grow flex items-center justify-center py-12">
-        <ProgressTimeline scanType={scanType} />
-      </div>
-    );
-  }
 
   return (
-    <div className="flex-grow max-w-4xl mx-auto w-full py-6 space-y-8">
-      {/* Title */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
-          Digital Content Verifier
+    <div className="py-6 space-y-8 max-w-4xl mx-auto">
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono text-[#111111]">
+          <Shield className="w-3.5 h-3.5 text-[#111111]" />
+          <span>VERIFY CONSOLE</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+          Verify Digital Authenticity.
         </h1>
-        <p className="text-xs sm:text-sm text-gray-400 max-w-lg mx-auto">
-          Input suspicious URLs, files, letters, or codes. The Truth Engine evaluates mathematical reputation logs and visual parameters.
+        <p className="text-xs sm:text-sm text-[#666666] max-w-lg mx-auto leading-relaxed">
+          Select input vector below to run multi-modal AI threat inspection & cryptographic validation.
         </p>
       </div>
 
-      {/* Error alert */}
-      {error && (
-        <div className="border border-rose-500/20 bg-rose-500/5 rounded-2xl p-4 flex gap-3.5 items-start">
-          <ShieldAlert className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <h4 className="font-bold text-white text-sm">Verification Failed</h4>
-            <p className="text-xs text-gray-400 leading-normal">{error}</p>
+      {/* Error Toast / Alert */}
+      {errorMsg && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-xl bg-[#FFEBEE] border border-[#FFCDD2] text-[#C62828] text-xs font-medium flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
           </div>
-        </div>
+          <button
+            onClick={() => setErrorMsg(null)}
+            className="text-xs underline hover:no-underline font-mono"
+          >
+            Dismiss
+          </button>
+        </motion.div>
       )}
 
-      {/* Main Form Console */}
-      <UploadCard
-        onAnalyzeUrl={handleAnalyzeUrl}
-        onAnalyzeText={handleAnalyzeText}
-        onAnalyzeEmail={handleAnalyzeEmail}
-        onAnalyzeFile={handleAnalyzeFile}
-        loading={loading}
-      />
-
-      {/* Trust Advisory banner */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-        <div className="border border-white/5 bg-black/25 rounded-2xl p-5 flex gap-3">
-          <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <h4 className="font-semibold text-white text-xs tracking-wider uppercase font-mono">Explainable Verdicts</h4>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              We compile cryptographic certificates, public register dates, content structures, and call the Gemini API to explain the reasoning behind every verdict.
-            </p>
-          </div>
-        </div>
-
-        <div className="border border-white/5 bg-black/25 rounded-2xl p-5 flex gap-3">
-          <ShieldCheck className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <h4 className="font-semibold text-white text-xs tracking-wider uppercase font-mono">No Private Retention</h4>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              We never inspect nor store raw credentials, codes, or private files. File checks run exclusively in volatile structures and details delete upon completion.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Console State Switcher */}
+      <AnimatePresence mode="wait">
+        {!isAnalyzing ? (
+          <motion.div
+            key="upload"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3 }}
+          >
+            <UploadCard
+              onAnalysisStart={handleStart}
+              onAnalysisSuccess={handleSuccess}
+              onError={handleError}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="progress"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <ProgressTimeline
+              initialTaskName={activeTaskName}
+              onComplete={handleProgressComplete}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

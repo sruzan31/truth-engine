@@ -1,10 +1,14 @@
 import json
 import logging
 from typing import List, Tuple
-from backend.app.models.schemas import EvidenceItem, AnalysisResult
-from backend.app.utils.gemini import analyze_with_gemini
 from datetime import datetime
 import uuid
+try:
+    from app.models.schemas import EvidenceItem, AnalysisResult
+    from app.utils.gemini import analyze_with_gemini
+except ImportError:
+    from backend.app.models.schemas import EvidenceItem, AnalysisResult
+    from backend.app.utils.gemini import analyze_with_gemini
 
 logger = logging.getLogger("uvicorn")
 
@@ -15,7 +19,7 @@ def calculate_trust_score(evidence: List[EvidenceItem]) -> float:
     Weights are between 0.0 and 1.0.
     """
     if not evidence:
-        return 50.0  # Default neutral score
+        return 50.0
         
     total_weighted_score = 0.0
     total_weight = 0.0
@@ -41,20 +45,13 @@ def determine_risk_level(trust_score: float) -> str:
 
 def calculate_confidence_score(evidence: List[EvidenceItem]) -> float:
     """
-    Confidence score is based on the quality and completeness of evidence.
-    If we have high-weight evidence items with definitive outcomes, confidence is higher.
-    We also penalize if there are very few evidence sources.
+    Calculates confidence rating based on quantity and quality of findings.
     """
     if not evidence:
         return 30.0
         
-    # Standard base confidence
     base_confidence = 70.0
-    
-    # Add confidence for more pieces of evidence (up to +20)
     quantity_bonus = min(len(evidence) * 5, 20.0)
-    
-    # Penalize if critical evidence couldn't be collected (e.g. status='info' but score=50 meaning no data)
     info_items = [e for e in evidence if e.status == 'info' and e.score == 50.0]
     completeness_penalty = len(info_items) * 6.0
     
@@ -70,7 +67,7 @@ def generate_ai_explanation(
 ) -> Tuple[str, str]:
     """
     Invokes Gemini to generate explainable AI reasoning and recommended actions
-    based on the target details and mathematical findings.
+    based on the target details and findings.
     """
     evidence_summary = []
     for item in evidence:
@@ -87,32 +84,30 @@ Scan Type: {scan_type}
 Calculated Trust Score: {trust_score}/100
 Calculated Risk Level: {risk_level.upper()}
 
-Here is the collected evidence from our scanners:
+Collected evidence:
 {evidence_str}
 
 Please generate a professional cybersecurity analysis containing:
 1. Explainable AI reasoning detailing WHY we arrived at this score, analyzing security implications.
-2. Recommended Action: Actionable next steps for the user (e.g., 'Safe to proceed', 'Do NOT enter credentials', 'Delete file').
+2. Recommended Action: Actionable next steps for the user.
 
 Return your answer strictly as a JSON object with exactly two keys: "reasoning" and "recommendation".
 Example JSON format:
 {{
-  "reasoning": "Detailed technical and AI-derived explanation here...",
-  "recommendation": "Actionable advice here..."
+  "reasoning": "Detailed technical explanation...",
+  "recommendation": "Actionable advice..."
 }}
 Do not write any other text besides the JSON.
 """
     
     system_instruction = (
         "You are the Core Trust Assessment Engine of a premium AI Cybersecurity Platform called The Truth Engine. "
-        "Your task is to analyze evidence and provide deep, clear, explainable security summaries. "
-        "Always return responses in valid JSON format containing 'reasoning' and 'recommendation'."
+        "Provide deep, clear, explainable security summaries. Return responses in valid JSON only."
     )
     
     try:
         response_text = analyze_with_gemini(prompt, system_instruction)
         
-        # Clean up code block formatting if any
         if response_text.startswith("```json"):
             response_text = response_text.replace("```json", "", 1)
         if response_text.endswith("```"):
@@ -122,22 +117,21 @@ Do not write any other text besides the JSON.
         data = json.loads(response_text)
         return data.get("reasoning", ""), data.get("recommendation", "")
     except Exception as e:
-        logger.error(f"Error parsing Gemini explanation: {e}. Raw response: {response_text if 'response_text' in locals() else 'None'}")
+        logger.error(f"Error parsing Gemini explanation: {e}")
         
-        # Safe fallback templates
         if risk_level == "low":
             return (
-                f"The target {target} exhibits multiple positive safety indicators. Standard validation checks, domain age, metadata indicators, and structural markers match standard non-threatening properties.",
+                f"The target {target} exhibits multiple positive safety indicators matching standard non-threatening properties.",
                 "Safe to interact with. Normal precautions apply."
             )
         elif risk_level == "medium":
             return (
-                f"The analysis for {target} shows some warnings. While there are no confirmed signatures of malicious behavior, certain indicators (such as recent creation or low reputation history) suggest checking manually.",
+                f"The analysis for {target} shows some warnings requiring manual verification.",
                 "Proceed with caution. Verify sender identities and links manually."
             )
         else:
             return (
-                f"CRITICAL WARNING: The target {target} has failed primary security checks and exhibits high risk patterns. Specific signatures include phishing heuristic alerts, bad reputation reports, or malicious structures.",
+                f"CRITICAL WARNING: The target {target} has failed primary security checks and exhibits high risk patterns.",
                 "Do NOT interact with this target. Block, quarantine, or discard immediately."
             )
 

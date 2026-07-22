@@ -1,102 +1,119 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #3b82f6;
-  --color-secondary: #a855f7;
-  --color-accent: #6366f1;
-  --color-bg-dark: #030303;
-  --color-bg-card: rgba(10, 11, 18, 0.65);
-  --color-border-glass: rgba(255, 255, 255, 0.08);
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #06b6d4;
-  
-  --font-sans: 'Outfit', sans-serif;
-  
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-glow: glow 2s ease-in-out infinite alternate;
+@layer base {
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FAFAFA;
+    --bg-elevated: #F6F6F7;
+    --border-color: #E8E8E8;
+    --text-primary: #111111;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    
+    --color-success: #1F7A3E;
+    --color-warning: #C08400;
+    --color-danger: #C62828;
+    --color-trust-blue: #2563EB;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-:root {
-  color-scheme: dark;
-  background-color: #030303;
-  color: #f3f4f6;
-}
-
-body {
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: radial-gradient(circle at 50% 0%, #0c081e 0%, #030303 70%);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Custom Scrollbar */
+/* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #030303;
+  background: #FAFAFA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2937;
-  border-radius: 4px;
+  background: #D8D8D8;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  background: #B0B0B0;
 }
 
-/* Premium Glassmorphism Utility */
-.glass-panel {
-  background: rgba(10, 11, 18, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* Floating Glass Component Utility */
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #E8E8E8;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
-.glass-panel-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Enterprise Card Styling */
+.truth-card {
+  background: #FFFFFF;
+  border: 1px solid #E8E8E8;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-panel-hover:hover {
-  border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
+.truth-card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.truth-card-hover:hover {
+  border-color: #D8D8D8;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
   transform: translateY(-2px);
 }
 
-/* Cyber Gradients */
-.text-gradient {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Subtly animated dashed upload container */
+.drag-zone {
+  border: 1.5px dashed #E8E8E8;
+  border-radius: 16px;
+  background-color: #FAFAFA;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.border-gradient {
-  border-image: linear-gradient(135deg, #3b82f6, #a855f7) 1;
+.drag-zone:hover, .drag-zone.active {
+  border-color: #111111;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
-/* Shimmer animation for loading states */
-.shimmer {
+/* Custom Linear Progress Shimmer */
+.shimmer-bar {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 75%
+    #F6F6F7 0%,
+    #E8E8E8 50%,
+    #F6F6F7 100%
   );
   background-size: 200% 100%;
-  animation: loading-shimmer 1.5s infinite;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
 
-@keyframes loading-shimmer {
+@keyframes shimmer {
   0% {
     background-position: 200% 0;
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+/* Print Overrides */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
   }
 }

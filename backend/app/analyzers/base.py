@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, Any
-from backend.app.models.schemas import EvidenceItem
+try:
+    from app.models.schemas import EvidenceItem
+except ImportError:
+    from backend.app.models.schemas import EvidenceItem
 
 class BaseAnalyzer(ABC):
     @abstractmethod

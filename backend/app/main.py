@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.config import settings
-from backend.app.routes import analyze, history
+from app.config import settings
+from app.routes import analyze, history
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -20,11 +20,12 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development ease, restrict in production configuration
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Include routers
 app.include_router(analyze.router, prefix=settings.API_V1_STR)

@@ -5,9 +5,14 @@ from urllib.parse import urlparse
 import datetime
 from typing import List
 import requests
-from backend.app.analyzers.base import BaseAnalyzer
-from backend.app.models.schemas import EvidenceItem
-from backend.app.config import settings
+try:
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.config import settings
+except ImportError:
+    from backend.app.analyzers.base import BaseAnalyzer
+    from backend.app.models.schemas import EvidenceItem
+    from backend.app.config import settings
 
 logger = logging.getLogger("uvicorn")
 
@@ -114,7 +119,7 @@ class UrlAnalyzer(BaseAnalyzer):
         )
         
     def _check_domain_age(self, domain: str) -> EvidenceItem:
-        if settings.is_mock_gemini and "example" in domain: # Help local dry-run
+        if settings.is_mock_gemini and "example" in domain:
             return EvidenceItem(
                 category="Reputation",
                 title="Domain Age (WHOIS)",
@@ -126,8 +131,6 @@ class UrlAnalyzer(BaseAnalyzer):
             
         try:
             import whois
-            # Perform WHOIS lookup
-            # Strip subdomains for whois lookup
             domain_parts = domain.split(".")
             if len(domain_parts) > 2:
                 lookup_domain = ".".join(domain_parts[-2:])
@@ -173,7 +176,6 @@ class UrlAnalyzer(BaseAnalyzer):
                 raise Exception("No creation date returned")
         except Exception as e:
             logger.warning(f"WHOIS lookup failed for {domain}: {e}")
-            # Fallback to neutral score when whois fails (e.g. connection error or private domain)
             return EvidenceItem(
                 category="Reputation",
                 title="Domain Age (WHOIS Lookup)",
@@ -185,7 +187,6 @@ class UrlAnalyzer(BaseAnalyzer):
 
     def _check_virustotal(self, url: str) -> EvidenceItem:
         if settings.is_mock_virustotal:
-            # Simulate a VirusTotal check based on URL properties
             score = 100.0
             status = "success"
             desc = "VirusTotal report (Simulated): 0 engines flag this URL as malicious."
@@ -205,13 +206,9 @@ class UrlAnalyzer(BaseAnalyzer):
             )
             
         try:
-            # Base64 encode URL for VT V3 API
             import base64
             url_id = base64.urlsafe_b64encode(url.encode()).decode().strip("=")
-            
-            headers = {
-                "x-apikey": settings.VIRUSTOTAL_API_KEY
-            }
+            headers = {"x-apikey": settings.VIRUSTOTAL_API_KEY}
             response = requests.get(f"https://www.virustotal.com/api/v3/urls/{url_id}", headers=headers, timeout=5)
             
             if response.status_code == 200:
@@ -274,10 +271,7 @@ class UrlAnalyzer(BaseAnalyzer):
         try:
             api_url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={settings.SAFE_BROWSING_API_KEY}"
             payload = {
-                "client": {
-                    "clientId": "the-truth-engine",
-                    "clientVersion": "1.0.0"
-                },
+                "client": {"clientId": "the-truth-engine", "clientVersion": "1.0.0"},
                 "threatInfo": {
                     "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
                     "platformTypes": ["ANY_PLATFORM"],

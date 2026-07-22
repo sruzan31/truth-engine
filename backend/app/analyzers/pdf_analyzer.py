@@ -1,10 +1,15 @@
 import logging
 import fitz  # PyMuPDF
-from typing import List
-from backend.app.analyzers.base import BaseAnalyzer
-from backend.app.models.schemas import EvidenceItem
-from backend.app.utils.gemini import analyze_with_gemini
 import json
+from typing import List
+try:
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.utils.gemini import analyze_with_gemini
+except ImportError:
+    from backend.app.analyzers.base import BaseAnalyzer
+    from backend.app.models.schemas import EvidenceItem
+    from backend.app.utils.gemini import analyze_with_gemini
 
 logger = logging.getLogger("uvicorn")
 
@@ -26,18 +31,14 @@ class PdfAnalyzer(BaseAnalyzer):
                 score=0.0
             )]
             
-        # 1. Metadata Verification
         metadata_evidence = self._extract_metadata(doc)
         evidence.append(metadata_evidence)
         
-        # 2. Extract Links and Content
         text = ""
         links = []
         for page_num in range(len(doc)):
             page = doc[page_num]
             text += page.get_text()
-            
-            # Extract links on page
             try:
                 for link in page.get_links():
                     uri = link.get("uri")
@@ -46,11 +47,9 @@ class PdfAnalyzer(BaseAnalyzer):
             except Exception as e:
                 logger.warning(f"Error reading page links: {e}")
                 
-        # Link check evidence
         link_evidence = self._check_links(links)
         evidence.append(link_evidence)
         
-        # 3. AI Text Analysis
         ai_evidence = self._analyze_pdf_text(text, filename)
         evidence.append(ai_evidence)
         
@@ -58,31 +57,27 @@ class PdfAnalyzer(BaseAnalyzer):
         
     def _extract_metadata(self, doc: fitz.Document) -> EvidenceItem:
         meta = doc.metadata or {}
-        details = []
+        details = [f"PDF contains {len(doc)} page(s)."]
         score = 100.0
         status = "success"
         
         creator = meta.get("creator", "")
         producer = meta.get("producer", "")
         
-        details.append(f"PDF contains {len(doc)} page(s).")
-        
-        # Check if creator/producer are common exploitation programs
-        suspicious_producers = ["evince", "phantom", "exploit"]
-        for p in suspicious_producers:
+        for p in ["evince", "phantom", "exploit"]:
             if p in producer.lower() or p in creator.lower():
                 score = 60.0
                 status = "warning"
-                details.append(f"Suspicious PDF authoring tool detected: '{producer or creator}'")
+                details.append(f"Suspicious PDF tool signature: '{producer or creator}'")
                 break
                 
         if meta.get("encryption"):
-            details.append("Document encryption is active.")
+            details.append("Document encryption active.")
             
         if not creator and not producer:
             details.append("Author metadata is stripped.")
         else:
-            details.append(f"Authoring system: {creator or 'N/A'} (Tool: {producer or 'N/A'})")
+            details.append(f"System: {creator or 'N/A'} (Tool: {producer or 'N/A'})")
             
         return EvidenceItem(
             category="Metadata",
@@ -106,15 +101,13 @@ class PdfAnalyzer(BaseAnalyzer):
             
         score = 100.0
         reasons = []
-        
-        # Check for link abnormalities
         for link in links:
             if link.startswith("http://") and not link.startswith("https://"):
                 score -= 10.0
                 reasons.append("Unencrypted HTTP link targets")
             if any(ext in link.lower() for ext in [".zip", ".exe", ".scr", ".bat"]):
                 score -= 30.0
-                reasons.append("Links directing to executable files/archives")
+                reasons.append("Links directing to executable archives")
                 
         score = max(score, 0.0)
         status = "success" if score == 100.0 else ("warning" if score >= 60.0 else "danger")
@@ -134,47 +127,23 @@ class PdfAnalyzer(BaseAnalyzer):
             return EvidenceItem(
                 category="AI Analysis",
                 title="AI PDF Content Scan",
-                description="The PDF contains no readable text content (possibly scanned image without OCR). Structure appears clean.",
+                description="The PDF contains no readable text content (scanned document or image page). Structure appears clean.",
                 status="info",
                 weight=0.50,
                 score=50.0
             )
             
-        # Truncate text to avoid token limits
         truncated_text = text[:6000]
-        
         prompt = f"""
 Analyze the extracted text contents of a PDF document (filename: {filename}) for scam signals, phishing instructions, malware distribution language, or financial schemes.
-
-Document Text (first 6000 chars):
----
+Text snippet:
 {truncated_text}
----
-
-Please perform a cybersecurity inspection:
-1. Is the text designed to deceive (e.g. fake invoices, counterfeit security updates, fake tax forms, crypto phishing)?
-2. Does the document use manipulative tone or coercive text patterns to bypass standard filters?
-
-Output your response strictly as a JSON object with two keys:
-1. "score" (integer between 0 and 100, where 0 is highly dangerous/malicious and 100 is completely safe/legitimate)
-2. "findings" (short description summarizing your assessment)
-
-Example JSON response:
-{{
-  "score": 15,
-  "findings": "Document mimics a fake bank statement requesting emergency password resets. Significant phishing risks identified."
-}}
-Do not write any markdown code block wrap, only raw JSON.
+Output strictly a JSON object with keys "score" (0-100) and "findings".
 """
-        system_instruction = (
-            "You are an AI Document Security Analyst. Analyze PDF text content for fraud, spoofing, "
-            "and phishing indicators. Return JSON only."
-        )
+        system_instruction = "You are an AI Document Security Analyst. Analyze PDF text content for fraud and phishing indicators. Return JSON only."
         
         try:
             response_text = analyze_with_gemini(prompt, system_instruction)
-            
-            # Clean response text
             if response_text.startswith("```json"):
                 response_text = response_text.replace("```json", "", 1)
             if response_text.endswith("```"):
@@ -184,13 +153,7 @@ Do not write any markdown code block wrap, only raw JSON.
             data = json.loads(response_text)
             score = float(data.get("score", 50.0))
             findings = data.get("findings", "AI document content analysis completed.")
-            
-            if score >= 80.0:
-                status = "success"
-            elif score >= 50.0:
-                status = "warning"
-            else:
-                status = "danger"
+            status = "success" if score >= 80.0 else ("warning" if score >= 50.0 else "danger")
                 
             return EvidenceItem(
                 category="AI Analysis",

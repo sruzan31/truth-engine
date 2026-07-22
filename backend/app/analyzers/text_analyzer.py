@@ -1,23 +1,22 @@
 import logging
 from typing import List
-from backend.app.analyzers.base import BaseAnalyzer
-from backend.app.models.schemas import EvidenceItem
-from backend.app.utils.gemini import analyze_with_gemini
 import json
+try:
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.utils.gemini import analyze_with_gemini
+except ImportError:
+    from backend.app.analyzers.base import BaseAnalyzer
+    from backend.app.models.schemas import EvidenceItem
+    from backend.app.utils.gemini import analyze_with_gemini
 
 logger = logging.getLogger("uvicorn")
 
 class TextAnalyzer(BaseAnalyzer):
     def analyze(self, text: str, **kwargs) -> List[EvidenceItem]:
         evidence: List[EvidenceItem] = []
-        
-        # We will split text analysis into:
-        # 1. Emotional Manipulation & Urgency
-        # 2. Factuality / Scam Analysis
-        
         ai_evidence = self._check_text_semantics(text)
         evidence.append(ai_evidence)
-        
         return evidence
         
     def _check_text_semantics(self, text: str) -> EvidenceItem:
@@ -30,8 +29,8 @@ Text Snippet:
 ---
 
 Please perform a thorough risk assessment:
-1. Are there signs of phishing, SMiShing, or cyber scam templates (e.g. lottery winner, package delivery issue, crypto investment double scheme)?
-2. Does the text use high emotional manipulation (fear, extreme urgency, pressure) to bypass critical thinking?
+1. Are there signs of phishing, SMiShing, or cyber scam templates?
+2. Does the text use high emotional manipulation (fear, extreme urgency, pressure)?
 3. Are there clear factual errors or misinformation markers?
 
 Output your response strictly as a JSON object with two keys:
@@ -52,8 +51,6 @@ Do not write any markdown code block wrap, only raw JSON.
         
         try:
             response_text = analyze_with_gemini(prompt, system_instruction)
-            
-            # Clean response text
             if response_text.startswith("```json"):
                 response_text = response_text.replace("```json", "", 1)
             if response_text.endswith("```"):
@@ -81,12 +78,9 @@ Do not write any markdown code block wrap, only raw JSON.
             )
         except Exception as e:
             logger.error(f"Text semantics AI analyzer error: {e}")
-            
-            # Simple fallback heuristic
             score = 100.0
             reasons = []
-            
-            scam_triggers = ["congratulations", "gift card", "claim now", "double your crypto", "irs agent", "warrants for arrest", "verify now"]
+            scam_triggers = ["congratulations", "gift card", "claim now", "double your crypto", "irs agent", "verify now"]
             for trigger in scam_triggers:
                 if trigger in text.lower():
                     score -= 30.0

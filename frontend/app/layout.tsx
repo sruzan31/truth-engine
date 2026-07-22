@@ -1,17 +1,19 @@
 import type { Metadata } from 'next';
-import { Outfit, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-const outfit = Outfit({
+const inter = Inter({
   variable: '--font-sans',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const viewport = {
@@ -20,11 +22,18 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'The Truth Engine | AI Cybersecurity & Digital Trust Platform',
+  title: 'Truth Engine — Know What To Trust',
   description:
-    'An intelligent digital trust engine to verify URLs, emails, messages, QR codes, and files for cyber safety, phishing signatures, and manipulation.',
-  keywords: ['Cybersecurity', 'AI Phishing Detector', 'Safe Browsing', 'Gemini AI', 'WHOIS lookup', 'VirusTotal'],
-  authors: [{ name: 'The Truth Engine Team' }],
+    'AI-powered digital trust intelligence for websites, emails, images, PDFs, QR codes and online content.',
+  keywords: [
+    'Cybersecurity',
+    'Trust Intelligence',
+    'AI Phishing Detector',
+    'Content Verification',
+    'Enterprise Security',
+    'Deepfake Detection',
+  ],
+  authors: [{ name: 'Truth Engine Intelligence' }],
 };
 
 export default function RootLayout({
@@ -35,12 +44,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-bg-dark text-gray-100 selection:bg-primary/30 selection:text-white">
+      <body className="min-h-full flex flex-col bg-[#FFFFFF] text-[#111111] selection:bg-[#111111] selection:text-white">
         <Navbar />
-        <main className="flex-grow flex flex-col w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {children}
+        <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-16 pt-24 pb-16">
+          <div className="max-w-[1280px] mx-auto w-full">
+            {children}
+          </div>
         </main>
         <Footer />
       </body>
