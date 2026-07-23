@@ -7,14 +7,15 @@ try:
     from app.config import settings
     from app.models.schemas import AnalysisResult
 except ImportError:
-    from backend.app.config import settings
-    from backend.app.models.schemas import AnalysisResult
+    from app.config import settings
+    from app.models.schemas import AnalysisResult
 
 logger = logging.getLogger("uvicorn")
 
 # Local fallback storage configuration
 FALLBACK_DB_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 FALLBACK_DB_PATH = os.path.join(FALLBACK_DB_DIR, "history.json")
+USER_DB_PATH = os.path.join(FALLBACK_DB_DIR, "users.json")
 
 class Database:
     def __init__(self):
@@ -114,6 +115,89 @@ class Database:
         except Exception as e:
             logger.error(f"Failed to save to local fallback database: {e}")
             return False
+
+    async def save_or_update_user(self, user_doc: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Creates or updates a user profile in MongoDB or fallback JSON database.
+        """
+        user_doc = {
+            'uid': user_doc['uid'],
+            'name': user_doc['name'],
+            'email': user_doc['email'],
+            'photoURL': user_doc['photoURL'],
+            'lastLogin': user_doc['lastLogin'],
+        }
+        if not self.use_fallback and self.db is not None:
+            now = user_doc['lastLogin']
+            update_payload = {
+                '$set': {
+                    'name': user_doc['name'],
+                    'email': user_doc['email'],
+                    'photoURL': user_doc['photoURL'],
+                    'lastLogin': now,
+                },
+                '$setOnInsert': {
+                    'createdAt': now,
+                    'analysisCount': 0,
+                },
+            }
+            await self.db.users.update_one({'uid': user_doc['uid']}, update_payload, upsert=True)
+            saved_user = await self.db.users.find_one({'uid': user_doc['uid']})
+            if saved_user:
+                saved_user['id'] = str(saved_user.pop('_id')) if '_id' in saved_user else saved_user.get('uid')
+                saved_user['analysisCount'] = int(saved_user.get('analysisCount', 0))
+                return saved_user
+            raise ValueError('User save failed.')
+
+        try:
+            with open(USER_DB_PATH, 'r') as f:
+                users = json.load(f)
+        except Exception:
+            users = []
+
+        existing = next((item for item in users if item.get('uid') == user_doc['uid']), None)
+        if existing:
+            existing.update({
+                'name': user_doc['name'],
+                'email': user_doc['email'],
+                'photoURL': user_doc['photoURL'],
+                'lastLogin': user_doc['lastLogin'],
+            })
+        else:
+            existing = {
+                'uid': user_doc['uid'],
+                'name': user_doc['name'],
+                'email': user_doc['email'],
+                'photoURL': user_doc['photoURL'],
+                'createdAt': user_doc['lastLogin'],
+                'lastLogin': user_doc['lastLogin'],
+                'analysisCount': 0,
+            }
+            users.append(existing)
+
+        with open(USER_DB_PATH, 'w') as f:
+            json.dump(users, f, indent=2)
+
+        return existing
+
+    async def get_user(self, uid: str) -> Optional[Dict[str, Any]]:
+        if not self.use_fallback and self.db is not None:
+            try:
+                user = await self.db.users.find_one({'uid': uid})
+                if user:
+                    user['id'] = str(user.pop('_id')) if '_id' in user else user.get('uid')
+                    user['analysisCount'] = int(user.get('analysisCount', 0))
+                    return user
+            except Exception as e:
+                logger.error(f'MongoDB user fetch failed: {e}')
+
+        try:
+            with open(USER_DB_PATH, 'r') as f:
+                users = json.load(f)
+            return next((item for item in users if item.get('uid') == uid), None)
+        except Exception as e:
+            logger.error(f'Failed to read user fallback DB: {e}')
+            return None
 
     async def get_scan(self, scan_id: str) -> Optional[Dict[str, Any]]:
         """

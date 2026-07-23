@@ -5,7 +5,7 @@ from google.genai import types
 try:
     from app.config import settings
 except ImportError:
-    from backend.app.config import settings
+    from app.config import settings
 
 logger = logging.getLogger("uvicorn")
 

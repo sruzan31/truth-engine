@@ -2,9 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Shield, Settings, User, ArrowUpRight, Search, Activity, History, Info } from 'lucide-react';
+import {
+  Shield,
+  Settings,
+  User,
+  ArrowUpRight,
+  Search,
+  Activity,
+  History,
+  Info,
+  ChevronDown,
+  LogOut,
+  UserCircle,
+} from 'lucide-react';
+import { useAuth } from '@/components/AuthProvider';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -12,103 +25,145 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 12);
+      setScrolled(window.scrollY > 14);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const { user, loading, logout } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const navItems = [
-    { label: 'Overview', href: '/', icon: Activity },
+    { label: 'Home', href: '/', icon: Activity },
     { label: 'Analyze', href: '/analyze', icon: Search },
     { label: 'Dashboard', href: '/dashboard', icon: Shield },
     { label: 'History', href: '/history', icon: History },
-    { label: 'Architecture', href: '/about', icon: Info },
+    { label: 'About', href: '/about', icon: Info },
   ];
 
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    setDropdownOpen(false);
+    router.push('/login');
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-3 transition-all duration-300 pointer-events-none">
-      <div className="max-w-[1280px] mx-auto flex items-center justify-between">
-        {/* Floating Bar Container */}
-        <div
-          className={`w-full flex items-center justify-between px-5 py-2.5 rounded-full pointer-events-auto transition-all duration-300 ${
-            scrolled
-              ? 'bg-white/90 backdrop-blur-xl border border-[#E8E8E8] shadow-[0_4px_24px_rgba(0,0,0,0.06)]'
-              : 'bg-white/80 backdrop-blur-md border border-[#E8E8E8]/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
-          }`}
-        >
-          {/* Logo Section */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white transition-transform duration-200 group-hover:scale-105">
-              <Shield className="w-4 h-4 text-white stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-[#111111]">
-                Truth Engine
-              </span>
-              <span className="text-[10px] font-mono tracking-widest text-[#999999] uppercase -mt-0.5">
-                Enterprise
-              </span>
-            </div>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#060B14]/90 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.2)]">
+      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-4 sm:px-8 lg:px-12">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-[#111827] text-[#3B82F6] shadow-[0_20px_80px_rgba(59,130,246,0.16)]">
+            <Shield className="h-5 w-5" />
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-sm font-semibold tracking-tight text-white">Truth Engine</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#94A3B8]">Digital Trust</span>
+          </div>
+        </Link>
+
+        <nav className="hidden items-center gap-1 rounded-full bg-white/5 px-2 py-1 text-sm text-[#CBD5E1] backdrop-blur-md md:flex">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative px-4 py-2 transition-all duration-200 ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-[#94A3B8] hover:text-white'
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute inset-0 rounded-full bg-white/10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href="/analyze"
+            className="hidden items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-4 py-2 text-sm font-semibold text-[#E0F2FE] transition hover:bg-[#3B82F6]/20 md:inline-flex"
+          >
+            <ArrowUpRight className="h-4 w-4" />
+            Analyze
           </Link>
 
-          {/* Navigation Centered */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#F6F6F7] p-1 rounded-full border border-[#E8E8E8]/60">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                    isActive
-                      ? 'text-[#111111] font-semibold'
-                      : 'text-[#666666] hover:text-[#111111]'
-                  }`}
+          <Link
+            href="/settings"
+            className="rounded-full border border-white/10 bg-white/5 p-3 text-[#94A3B8] transition hover:bg-white/10 hover:text-white"
+            title="Settings"
+          >
+            <Settings className="h-4 w-4" />
+          </Link>
+
+          {user ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setDropdownOpen((value) => !value)}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-white shadow-[0_10px_40px_rgba(0,0,0,0.16)] transition hover:border-[#3B82F6]"
+              >
+                <img
+                  src={user.photoURL}
+                  alt={user.name}
+                  className="h-9 w-9 rounded-full object-cover"
+                />
+                <span className="hidden sm:inline-block">{user.name.split(' ')[0]}</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              {dropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute right-0 top-full mt-3 w-52 rounded-3xl border border-white/10 bg-[#0F172A] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activePill"
-                      className="absolute inset-0 bg-white rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-[#E8E8E8]"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    <item.icon className="w-3.5 h-3.5 stroke-[1.8]" />
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/analyze"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#111111] hover:bg-black text-white text-xs font-medium transition-all duration-200 shadow-xs hover:shadow-sm hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <span>Analyze Content</span>
-              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2]" />
-            </Link>
-
-            <div className="h-4 w-[1px] bg-[#E8E8E8] hidden sm:block" />
-
-            <Link
-              href="/settings"
-              className="p-2 rounded-full text-[#666666] hover:text-[#111111] hover:bg-[#F6F6F7] transition-colors border border-transparent hover:border-[#E8E8E8]"
-              title="Settings"
-            >
-              <Settings className="w-4 h-4 stroke-[1.8]" />
-            </Link>
-
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-white transition hover:bg-white/10"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <Shield className="h-4 w-4" /> Dashboard
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-white transition hover:bg-white/10"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <UserCircle className="h-4 w-4" /> Profile
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="mt-2 flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm text-white transition hover:bg-white/10"
+                  >
+                    <LogOut className="h-4 w-4" /> Logout
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          ) : (
             <button
-              className="w-8 h-8 rounded-full bg-[#F6F6F7] border border-[#E8E8E8] flex items-center justify-center text-[#111111] hover:bg-[#E8E8E8] transition-colors"
-              title="User Workspace"
+              type="button"
+              onClick={() => router.push('/login')}
+              className="rounded-full bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#2563EB]"
             >
-              <User className="w-4 h-4 stroke-[1.8]" />
+              {loading ? 'Loading…' : 'Login'}
             </button>
-          </div>
+          )}
         </div>
       </div>
     </header>

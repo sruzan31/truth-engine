@@ -1,15 +1,20 @@
 import logging
-import fitz  # PyMuPDF
 import json
 from typing import List
+
+try:
+    import fitz  # PyMuPDF
+except ImportError:  # pragma: no cover
+    fitz = None
+
 try:
     from app.analyzers.base import BaseAnalyzer
     from app.models.schemas import EvidenceItem
     from app.utils.gemini import analyze_with_gemini
 except ImportError:
-    from backend.app.analyzers.base import BaseAnalyzer
-    from backend.app.models.schemas import EvidenceItem
-    from backend.app.utils.gemini import analyze_with_gemini
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.utils.gemini import analyze_with_gemini
 
 logger = logging.getLogger("uvicorn")
 
@@ -18,6 +23,17 @@ class PdfAnalyzer(BaseAnalyzer):
         evidence: List[EvidenceItem] = []
         filename = kwargs.get("filename", "document.pdf")
         
+        if fitz is None:
+            logger.warning("PyMuPDF is not installed; PDF analysis fallback will run without content parsing.")
+            return [EvidenceItem(
+                category="Security",
+                title="PDF Analysis Unavailable",
+                description="PDF parsing is unavailable because the PyMuPDF dependency is not installed.",
+                status="warning",
+                weight=1.0,
+                score=50.0
+            )]
+
         try:
             doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         except Exception as e:

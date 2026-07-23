@@ -27,12 +27,14 @@ interface UploadCardProps {
   onAnalysisStart: (taskName: string) => void;
   onAnalysisSuccess: (result: AnalysisResult) => void;
   onError: (errorMsg: string) => void;
+  userId?: string | null;
 }
 
 export default function UploadCard({
   onAnalysisStart,
   onAnalysisSuccess,
   onError,
+  userId,
 }: UploadCardProps) {
   const [activeTab, setActiveTab] = useState<InputCategory>('website');
 
@@ -84,7 +86,7 @@ export default function UploadCard({
           return;
         }
         onAnalysisStart('Scanning URL & domain metadata...');
-        const res = await apiService.analyzeUrl(urlInput.trim());
+        const res = await apiService.analyzeUrl(urlInput.trim(), userId);
         onAnalysisSuccess(res);
       } else if (activeTab === 'text') {
         if (!textInput.trim()) {
@@ -92,7 +94,7 @@ export default function UploadCard({
           return;
         }
         onAnalysisStart('Analyzing AI text fingerprints & syntax patterns...');
-        const res = await apiService.analyzeText(textInput.trim());
+        const res = await apiService.analyzeText(textInput.trim(), userId);
         onAnalysisSuccess(res);
       } else if (activeTab === 'email') {
         if (!emailBody.trim()) {
@@ -100,7 +102,7 @@ export default function UploadCard({
           return;
         }
         onAnalysisStart('Checking email headers & phishing indicators...');
-        const res = await apiService.analyzeEmail(emailSubject, emailBody);
+        const res = await apiService.analyzeEmail(emailSubject, emailBody, undefined, undefined, userId);
         onAnalysisSuccess(res);
       } else if (activeTab === 'image') {
         if (!selectedFile) {
@@ -116,7 +118,7 @@ export default function UploadCard({
           return;
         }
         onAnalysisStart('Parsing PDF structure & scanning embedded code...');
-        const res = await apiService.analyzePdf(selectedFile);
+        const res = await apiService.analyzePdf(selectedFile, userId);
         onAnalysisSuccess(res);
       } else if (activeTab === 'qr') {
         if (!selectedFile) {
@@ -124,7 +126,7 @@ export default function UploadCard({
           return;
         }
         onAnalysisStart('Decoding QR payload & resolving target URL...');
-        const res = await apiService.analyzeQr(selectedFile);
+        const res = await apiService.analyzeQr(selectedFile, userId);
         onAnalysisSuccess(res);
       } else if (activeTab === 'voice') {
         if (!selectedFile) {

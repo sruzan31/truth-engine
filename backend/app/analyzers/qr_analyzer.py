@@ -7,9 +7,9 @@ try:
     from app.analyzers.url_analyzer import UrlAnalyzer
     from app.models.schemas import EvidenceItem
 except ImportError:
-    from backend.app.analyzers.base import BaseAnalyzer
-    from backend.app.analyzers.url_analyzer import UrlAnalyzer
-    from backend.app.models.schemas import EvidenceItem
+    from app.analyzers.base import BaseAnalyzer
+    from app.analyzers.url_analyzer import UrlAnalyzer
+    from app.models.schemas import EvidenceItem
 
 logger = logging.getLogger("uvicorn")
 

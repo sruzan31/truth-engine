@@ -6,9 +6,9 @@ try:
     from app.models.schemas import EvidenceItem
     from app.utils.gemini import analyze_audio_with_gemini
 except ImportError:
-    from backend.app.analyzers.base import BaseAnalyzer
-    from backend.app.models.schemas import EvidenceItem
-    from backend.app.utils.gemini import analyze_audio_with_gemini
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.utils.gemini import analyze_audio_with_gemini
 
 logger = logging.getLogger("uvicorn")
 

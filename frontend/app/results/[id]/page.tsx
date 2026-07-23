@@ -3,18 +3,7 @@
 import React, { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import {
-  ShieldCheck,
-  ShieldAlert,
-  ArrowLeft,
-  FileText,
-  AlertCircle,
-  Share2,
-  Download,
-  Clock,
-  CheckCircle2,
-  Globe,
-} from 'lucide-react';
+import { ArrowLeft, FileText, AlertCircle } from 'lucide-react';
 import TrustGauge from '@/components/TrustGauge';
 import EvidencePanel from '@/components/EvidencePanel';
 import RecommendationCard from '@/components/RecommendationCard';
@@ -83,91 +72,97 @@ export default function ResultsPage({ params }: ResultsPageProps) {
   if (error || !scan) {
     return (
       <div className="py-20 flex items-center justify-center">
-        <div className="truth-card p-8 max-w-md w-full text-center space-y-4">
-          <AlertCircle className="w-10 h-10 text-[#C62828] mx-auto" />
-          <h3 className="text-lg font-bold text-[#111111]">Report Not Available</h3>
-          <p className="text-xs text-[#666666] leading-relaxed">{error || 'Scan record not found.'}</p>
-          <div className="pt-2">
-            <Link
-              href="/analyze"
-              className="px-5 py-2.5 rounded-full bg-[#111111] text-white text-xs font-semibold inline-flex items-center gap-2"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Console</span>
-            </Link>
-          </div>
+        <div className="rounded-[32px] border border-[#F87171]/20 bg-[#7F1D1D]/10 p-8 text-center shadow-[0_30px_80px_rgba(0,0,0,0.2)] max-w-md w-full space-y-4">
+          <AlertCircle className="mx-auto h-10 w-10 text-[#FECACA]" />
+          <h3 className="text-2xl font-semibold text-white">Report Not Available</h3>
+          <p className="text-sm text-[#CBD5E1] leading-relaxed">{error || 'Scan record not found.'}</p>
+          <Link
+            href="/analyze"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1F2937]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Console
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 py-4 print:p-0 print:bg-white">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E8E8E8] pb-4 print:hidden">
-        <div className="space-y-1">
+    <div className="space-y-6 py-6 print:p-0 print:bg-white">
+      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        <div className="rounded-[32px] border border-white/10 bg-[#0B1121]/95 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
           <Link
             href="/analyze"
-            className="inline-flex items-center gap-1.5 text-xs text-[#666666] hover:text-[#111111] transition-colors font-medium mb-1"
+            className="inline-flex items-center gap-2 text-sm text-[#94A3B8] transition hover:text-white"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Console
+            <ArrowLeft className="h-4 w-4" />
+            Back to Console
           </Link>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white">
-              <FileText className="w-4 h-4" />
-            </div>
-            <h1 className="text-2xl font-extrabold text-[#111111] tracking-tight">
-              Enterprise Trust Audit Report
-            </h1>
+          <div className="mt-6 space-y-4">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#94A3B8]">Enterprise Trust Audit</span>
+            <h1 className="text-3xl font-semibold text-white">Security scan report</h1>
+            <p className="max-w-3xl text-sm leading-7 text-[#CBD5E1]">
+              A detailed verdict for {scan.target} with risk levels, evidence findings, and recommended remediation steps.
+            </p>
           </div>
         </div>
 
-        <div className="text-right text-xs font-mono text-[#666666] space-y-0.5">
-          <div>SCAN ID: <span className="text-[#111111] font-bold">{scan.scan_id}</span></div>
-          <div>TIMESTAMP: <span>{formatDate(scan.created_at)}</span></div>
+        <div className="space-y-4">
+          <div className="rounded-[28px] border border-white/10 bg-[#111827]/95 p-5 text-sm text-[#94A3B8] shadow-[0_20px_60px_rgba(0,0,0,0.24)]">
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-[0.32em] text-[#94A3B8]">Scan reference</span>
+              <button
+                onClick={handleDownloadPdf}
+                className="rounded-full bg-[#3B82F6] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#2563EB]"
+              >
+                Print report
+              </button>
+            </div>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-between text-white/80">
+                <span>ID</span>
+                <span className="font-semibold text-white truncate">{scan.scan_id}</span>
+              </div>
+              <div className="flex items-center justify-between text-white/80">
+                <span>Date</span>
+                <span>{formatDate(scan.created_at)}</span>
+              </div>
+              <div className="flex items-center justify-between text-white/80">
+                <span>Vector</span>
+                <span className="capitalize">{scan.scan_type}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Target Info Banner */}
-      <div className="truth-card p-5 bg-[#FFFFFF] border border-[#E8E8E8] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="space-y-1 min-w-0 max-w-2xl">
-          <span className="text-[10px] font-mono font-bold text-[#999999] uppercase tracking-wider block">
-            EVALUATED {scan.scan_type.toUpperCase()} VECTOR TARGET
-          </span>
-          <h2 className="text-base font-bold text-[#111111] font-mono truncate select-all">
-            {scan.target}
-          </h2>
+      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="space-y-6">
+          <div className="rounded-[32px] border border-white/10 bg-[#0B1121]/95 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <TrustGauge
+              score={scan.trust_score}
+              riskLevel={scan.risk_level}
+              confidence={scan.confidence_score}
+            />
+          </div>
+          <div className="rounded-[32px] border border-white/10 bg-[#0B1121]/95 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <RiskTimeline />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono font-semibold text-[#111111] uppercase">
-            {scan.scan_type} ANALYZER
-          </span>
-        </div>
-      </div>
-
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Trust Score, Risk Level & Recommendations */}
-        <div className="lg:col-span-5 space-y-6">
-          <TrustGauge
-            score={scan.trust_score}
-            riskLevel={scan.risk_level}
-            confidence={scan.confidence_score}
-          />
-
-          <RecommendationCard
-            reasoning={scan.reasoning}
-            recommendation={scan.recommendation}
-            riskLevel={scan.risk_level}
-            onDownloadPdf={handleDownloadPdf}
-          />
-        </div>
-
-        {/* Right Column: Timeline & Evidence Findings */}
-        <div className="lg:col-span-7 space-y-6">
-          <RiskTimeline />
-          <EvidencePanel evidence={scan.evidence} />
+        <div className="space-y-6">
+          <div className="rounded-[32px] border border-white/10 bg-[#0B1121]/95 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <RecommendationCard
+              reasoning={scan.reasoning}
+              recommendation={scan.recommendation}
+              riskLevel={scan.risk_level}
+              onDownloadPdf={handleDownloadPdf}
+            />
+          </div>
+          <div className="rounded-[32px] border border-white/10 bg-[#0B1121]/95 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <EvidencePanel evidence={scan.evidence} />
+          </div>
         </div>
       </div>
     </div>

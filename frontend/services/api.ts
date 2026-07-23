@@ -1,6 +1,6 @@
 import { AnalysisResult, DashboardStats } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api/v1';
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -14,6 +14,7 @@ export const apiService = {
   async analyzeUrl(url: string, userId?: string | null): Promise<AnalysisResult> {
     const response = await fetch(`${API_BASE_URL}/analyze/url`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -25,6 +26,7 @@ export const apiService = {
   async analyzeText(text: string, userId?: string | null): Promise<AnalysisResult> {
     const response = await fetch(`${API_BASE_URL}/analyze/text`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -42,6 +44,7 @@ export const apiService = {
   ): Promise<AnalysisResult> {
     const response = await fetch(`${API_BASE_URL}/analyze/email`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -59,6 +62,7 @@ export const apiService = {
 
     const response = await fetch(`${API_BASE_URL}/analyze/image`, {
       method: 'POST',
+      credentials: 'include',
       body: formData,
     });
     return handleResponse<AnalysisResult>(response);
@@ -73,6 +77,7 @@ export const apiService = {
 
     const response = await fetch(`${API_BASE_URL}/analyze/qr`, {
       method: 'POST',
+      credentials: 'include',
       body: formData,
     });
     return handleResponse<AnalysisResult>(response);
@@ -87,6 +92,7 @@ export const apiService = {
 
     const response = await fetch(`${API_BASE_URL}/analyze/pdf`, {
       method: 'POST',
+      credentials: 'include',
       body: formData,
     });
     return handleResponse<AnalysisResult>(response);
@@ -99,6 +105,7 @@ export const apiService = {
     }
     const response = await fetch(url.toString(), {
       method: 'GET',
+      credentials: 'include',
     });
     return handleResponse<AnalysisResult[]>(response);
   },
@@ -106,6 +113,7 @@ export const apiService = {
   async getScanResult(scanId: string): Promise<AnalysisResult> {
     const response = await fetch(`${API_BASE_URL}/history/${scanId}`, {
       method: 'GET',
+      credentials: 'include',
     });
     return handleResponse<AnalysisResult>(response);
   },
@@ -117,6 +125,7 @@ export const apiService = {
     }
     const response = await fetch(url.toString(), {
       method: 'GET',
+      credentials: 'include',
     });
     return handleResponse<DashboardStats>(response);
   },

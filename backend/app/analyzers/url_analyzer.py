@@ -10,9 +10,9 @@ try:
     from app.models.schemas import EvidenceItem
     from app.config import settings
 except ImportError:
-    from backend.app.analyzers.base import BaseAnalyzer
-    from backend.app.models.schemas import EvidenceItem
-    from backend.app.config import settings
+    from app.analyzers.base import BaseAnalyzer
+    from app.models.schemas import EvidenceItem
+    from app.config import settings
 
 logger = logging.getLogger("uvicorn")
 

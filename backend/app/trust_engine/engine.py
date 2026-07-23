@@ -7,8 +7,8 @@ try:
     from app.models.schemas import EvidenceItem, AnalysisResult
     from app.utils.gemini import analyze_with_gemini
 except ImportError:
-    from backend.app.models.schemas import EvidenceItem, AnalysisResult
-    from backend.app.utils.gemini import analyze_with_gemini
+    from app.models.schemas import EvidenceItem, AnalysisResult
+    from app.utils.gemini import analyze_with_gemini
 
 logger = logging.getLogger("uvicorn")
 

@@ -19,22 +19,22 @@ try:
     from app.trust_engine.engine import process_analysis
     from app.utils.db import db_helper
 except ImportError:
-    from backend.app.config import settings
-    from backend.app.models.schemas import (
+    from app.config import settings
+    from app.models.schemas import (
         UrlAnalysisRequest, 
         TextAnalysisRequest, 
         EmailAnalysisRequest, 
         AnalysisResult
     )
-    from backend.app.analyzers.url_analyzer import UrlAnalyzer
-    from backend.app.analyzers.email_analyzer import EmailAnalyzer
-    from backend.app.analyzers.text_analyzer import TextAnalyzer
-    from backend.app.analyzers.image_analyzer import ImageAnalyzer
-    from backend.app.analyzers.qr_analyzer import QrAnalyzer
-    from backend.app.analyzers.pdf_analyzer import PdfAnalyzer
-    from backend.app.analyzers.voice_analyzer import VoiceAnalyzer
-    from backend.app.trust_engine.engine import process_analysis
-    from backend.app.utils.db import db_helper
+    from app.analyzers.url_analyzer import UrlAnalyzer
+    from app.analyzers.email_analyzer import EmailAnalyzer
+    from app.analyzers.text_analyzer import TextAnalyzer
+    from app.analyzers.image_analyzer import ImageAnalyzer
+    from app.analyzers.qr_analyzer import QrAnalyzer
+    from app.analyzers.pdf_analyzer import PdfAnalyzer
+    from app.analyzers.voice_analyzer import VoiceAnalyzer
+    from app.trust_engine.engine import process_analysis
+    from app.utils.db import db_helper
 
 logger = logging.getLogger("uvicorn")
 router = APIRouter(prefix="/analyze", tags=["Analysis"])

@@ -2,98 +2,99 @@
 
 @layer base {
   :root {
-    --bg-primary: #FFFFFF;
-    --bg-secondary: #FAFAFA;
-    --bg-elevated: #F6F6F7;
-    --border-color: #E8E8E8;
-    --text-primary: #111111;
-    --text-secondary: #666666;
-    --text-muted: #999999;
-    
-    --color-success: #1F7A3E;
-    --color-warning: #C08400;
-    --color-danger: #C62828;
-    --color-trust-blue: #2563EB;
+    --bg-primary: #060B14;
+    --bg-surface: #111827;
+    --bg-card: #0F172A;
+    --bg-panel: #131D2F;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --text-primary: #F8FAFF;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --accent-blue: #3B82F6;
+    --accent-cyan: #06B6D4;
+    --accent-purple: #7C3AED;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --shadow: 0 30px 90px rgba(0, 0, 0, 0.22);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--bg-primary);
+    min-height: 100vh;
+    margin: 0;
+    background: radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 24%),
+      linear-gradient(180deg, #060B14 0%, #050A15 100%);
     color: var(--text-primary);
-    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-sans), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: rgba(59, 130, 246, 0.35);
+    color: white;
+  }
 }
 
-/* Custom Minimal Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #FAFAFA;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #D8D8D8;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #B0B0B0;
-}
-
-/* Floating Glass Component Utility */
-.glass-navbar {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid #E8E8E8;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-}
-
-/* Enterprise Card Styling */
+/* Dark glass surfaces and card system */
 .truth-card {
-  background: #FFFFFF;
-  border: 1px solid #E8E8E8;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.truth-card-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .truth-card-hover:hover {
-  border-color: #D8D8D8;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 30px 82px rgba(0, 0, 0, 0.28);
 }
 
-/* Subtly animated dashed upload container */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
 .drag-zone {
-  border: 1.5px dashed #E8E8E8;
-  border-radius: 16px;
-  background-color: #FAFAFA;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.85);
+  transition: all 0.2s ease;
 }
 
-.drag-zone:hover, .drag-zone.active {
-  border-color: #111111;
-  background-color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+.drag-zone:hover,
+.drag-zone.active {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(15, 23, 42, 0.95);
 }
 
-/* Custom Linear Progress Shimmer */
 .shimmer-bar {
-  background: linear-gradient(
-    90deg,
-    #F6F6F7 0%,
-    #E8E8E8 50%,
-    #F6F6F7 100%
-  );
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.05) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
 }
@@ -107,10 +108,35 @@
   }
 }
 
-/* Print Overrides */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.75);
+  outline-offset: 3px;
+}
+
+/* Scrollbar style */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.6);
+}
+
 @media print {
   body {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     color: #000000 !important;
   }
   .no-print {

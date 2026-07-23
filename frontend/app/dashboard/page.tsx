@@ -17,8 +17,10 @@ import HistoryTable from '@/components/HistoryTable';
 import Skeleton from '@/components/Skeleton';
 import apiService from '@/services/api';
 import { DashboardStats, AnalysisResult } from '@/types';
+import { useAuth } from '@/components/AuthProvider';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [scans, setScans] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +32,8 @@ export default function DashboardPage() {
         setLoading(true);
         setError(null);
         const [statsData, historyData] = await Promise.all([
-          apiService.getDashboardStats(),
-          apiService.getHistory(),
+          apiService.getDashboardStats(user?.uid ?? null),
+          apiService.getHistory(user?.uid ?? null),
         ]);
         setStats(statsData);
         setScans(historyData);
@@ -44,7 +46,7 @@ export default function DashboardPage() {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [user]);
 
   const lowRiskCount = stats?.risk_breakdown.low || 0;
   const threatCount =
@@ -56,29 +58,33 @@ export default function DashboardPage() {
     : 0;
 
   return (
-    <div className="space-y-8 py-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E8E8] pb-6">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAFAFA] border border-[#E8E8E8] text-xs font-mono text-[#111111]">
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            <span>SECURITY COMMAND CENTER</span>
+    <div className="space-y-8 py-6">
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-end">
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#111827]/80 px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#94A3B8] shadow-sm">
+            <LayoutDashboard className="h-4 w-4 text-[#7C3AED]" />
+            Security Command Center
           </div>
-          <h1 className="text-3xl font-extrabold text-[#111111] tracking-tight">
-            Security & Trust Intelligence
-          </h1>
-          <p className="text-xs text-[#666666]">
-            Real-time digital threat feeds, channel distribution, and audit log telemetry.
-          </p>
+          <div className="space-y-3">
+            <h1 className="text-4xl font-semibold tracking-tight text-white">Security & Trust Intelligence</h1>
+            <p className="max-w-3xl text-sm leading-7 text-[#CBD5E1]">
+              Command your security posture with live verification metrics, audit history, and risk insight from every scanned asset.
+            </p>
+          </div>
         </div>
 
-        <Link
-          href="/analyze"
-          className="px-5 py-2.5 rounded-full bg-[#111111] hover:bg-black text-white font-semibold text-xs inline-flex items-center gap-2 transition-all w-fit"
-        >
-          <span>Run Verification Scan</span>
-          <ArrowUpRight className="w-4 h-4" />
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+          <Link
+            href="/analyze"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#3B82F6] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#3B82F6]/20 transition hover:bg-[#2563EB]"
+          >
+            <span>Run Verification Scan</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <div className="rounded-full border border-white/10 bg-[#0F172A]/90 px-5 py-3 text-sm font-semibold text-[#CBD5E1]">
+            {user?.email}
+          </div>
+        </div>
       </div>
 
       {error && (

@@ -22,6 +22,15 @@ class AnalysisResult(BaseModel):
     created_at: str = Field(..., description="ISO 8601 UTC timestamp")
     user_id: Optional[str] = Field(None, description="Optional user identifier")
 
+class UserProfile(BaseModel):
+    uid: str = Field(..., description="Firebase user identifier")
+    name: str = Field(..., description="Full display name")
+    email: str = Field(..., description="Primary email address")
+    photoURL: str = Field(..., description="Google profile image URL")
+    createdAt: str = Field(..., description="User account creation timestamp")
+    lastLogin: str = Field(..., description="Most recent login timestamp")
+    analysisCount: int = Field(..., ge=0, description="Total trust analyses completed by the user")
+
 class UrlAnalysisRequest(BaseModel):
     url: str = Field(..., min_length=3, description="Target URL to inspect")
     user_id: Optional[str] = None

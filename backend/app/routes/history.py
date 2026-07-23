@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List, Dict, Any
-from backend.app.utils.db import db_helper
+from app.utils.db import db_helper
 
 logger = logging.getLogger("uvicorn")
 router = APIRouter(tags=["History & Dashboard"])

@@ -3,7 +3,7 @@ from typing import List, Any
 try:
     from app.models.schemas import EvidenceItem
 except ImportError:
-    from backend.app.models.schemas import EvidenceItem
+    from app.models.schemas import EvidenceItem
 
 class BaseAnalyzer(ABC):
     @abstractmethod
