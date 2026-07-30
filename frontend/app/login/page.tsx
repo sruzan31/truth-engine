@@ -2,17 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthProvider';
-import { Loader2, LogIn, Shield } from 'lucide-react';
+import { ArrowRight, Shield } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loading, login, error } = useAuth();
-
-  if (user) {
-    router.replace('/dashboard');
-    return null;
-  }
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#060B14] text-white">
@@ -36,7 +29,7 @@ export default function LoginPage() {
                 Secure your digital world.
               </h1>
               <p className="mx-auto max-w-xl text-sm leading-7 text-[#CBD5E1]/85">
-                Sign in with Google to continue to the premium AI trust analysis platform backed by FastAPI and Firebase session security.
+                Access the premium AI trust analysis platform backed by FastAPI. Direct access mode is enabled.
               </p>
             </div>
           </div>
@@ -47,35 +40,19 @@ export default function LoginPage() {
           >
             <button
               type="button"
-              onClick={async () => {
-                try {
-                  await login();
-                } catch (_) {
-                  /* handled in context */
-                }
-              }}
+              onClick={() => router.push('/dashboard')}
               className="inline-flex w-full items-center justify-center gap-3 rounded-3xl bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] px-6 py-4 text-sm font-semibold text-white shadow-[0_20px_70px_rgba(59,130,246,0.24)] transition duration-300 hover:-translate-y-0.5 hover:opacity-95 focus:outline-none"
             >
-              {loading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <LogIn className="h-5 w-5" />
-              )}
-              <span>{loading ? 'Signing in…' : 'Continue with Google'}</span>
+              <span>Enter Security Dashboard</span>
+              <ArrowRight className="h-5 w-5" />
             </button>
 
             <div className="mt-6 rounded-[24px] border border-white/10 bg-white/5 p-4 text-left text-sm text-[#CBD5E1]">
               <p className="font-semibold text-white">Privacy first.</p>
               <p className="mt-2 text-[#94A3B8]">
-                We never access your private emails. Firebase authentication only verifies your identity to create a secure session.
+                Truth Engine processes your verification scans securely without storing sensitive authentication credentials.
               </p>
             </div>
-
-            {error ? (
-              <div className="mt-5 rounded-3xl bg-[#EF4444]/10 border border-[#EF4444]/20 p-4 text-sm text-[#FEE2E2]">
-                {error}
-              </div>
-            ) : null}
 
             <div className="mt-8 grid gap-3 text-xs text-[#94A3B8] sm:grid-cols-2">
               <a href="/privacy" className="transition hover:text-white">
@@ -91,3 +68,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Info, Shield, CheckCircle2, Scale, Cpu, Lock } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Info, Scale, Cpu, CheckCircle2 } from 'lucide-react';
 
 export default function AboutPage() {
   const methodologies = [
@@ -65,12 +64,12 @@ export default function AboutPage() {
             <Cpu className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-[#111111]">The Core Engineering Question: "Can I trust this?"</h3>
+            <h3 className="text-base font-bold text-[#111111]">The Core Engineering Question: &quot;Can I trust this?&quot;</h3>
             <p className="text-xs text-[#666666] font-mono">DETERMINISTIC & EXPLAINABLE SECURITY</p>
           </div>
         </div>
         <p className="text-xs text-[#111111] leading-relaxed p-4 rounded-xl bg-[#FAFAFA] border border-[#E8E8E8]">
-          The Truth Engine replaces opaque binary classifications ("Safe" vs "Unsafe") with multi-layered, explainable risk profiling. By combining mathematical security ratings (SSL, WHOIS, VirusTotal) with natural language comprehension (Google Gemini AI), we formulate a 0-100 Trust Verdict backed by verifiable evidence trails.
+          The Truth Engine replaces opaque binary classifications (&quot;Safe&quot; vs &quot;Unsafe&quot;) with multi-layered, explainable risk profiling. By combining mathematical security ratings (SSL, WHOIS, VirusTotal) with natural language comprehension (Google Gemini AI), we formulate a 0-100 Trust Verdict backed by verifiable evidence trails.
         </p>
       </div>
 

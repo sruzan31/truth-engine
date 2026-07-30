@@ -4,12 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
-  Shield,
-  ShieldAlert,
-  TrendingUp,
-  CheckCircle,
   ArrowUpRight,
-  BarChart3,
   History,
   AlertTriangle,
 } from 'lucide-react';
@@ -17,10 +12,8 @@ import HistoryTable from '@/components/HistoryTable';
 import Skeleton from '@/components/Skeleton';
 import apiService from '@/services/api';
 import { DashboardStats, AnalysisResult } from '@/types';
-import { useAuth } from '@/components/AuthProvider';
 
 export default function DashboardPage() {
-  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [scans, setScans] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,12 +25,12 @@ export default function DashboardPage() {
         setLoading(true);
         setError(null);
         const [statsData, historyData] = await Promise.all([
-          apiService.getDashboardStats(user?.uid ?? null),
-          apiService.getHistory(user?.uid ?? null),
+          apiService.getDashboardStats(null),
+          apiService.getHistory(null),
         ]);
         setStats(statsData);
         setScans(historyData);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
         setError('Failed to fetch dashboard telemetry records.');
       } finally {
@@ -46,7 +39,7 @@ export default function DashboardPage() {
     };
 
     fetchDashboardData();
-  }, [user]);
+  }, []);
 
   const lowRiskCount = stats?.risk_breakdown.low || 0;
   const threatCount =
@@ -82,7 +75,7 @@ export default function DashboardPage() {
             <ArrowUpRight className="h-4 w-4" />
           </Link>
           <div className="rounded-full border border-white/10 bg-[#0F172A]/90 px-5 py-3 text-sm font-semibold text-[#CBD5E1]">
-            {user?.email}
+            Direct Session Mode
           </div>
         </div>
       </div>

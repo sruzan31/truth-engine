@@ -2,8 +2,7 @@
 
 import React, { use, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowLeft, FileText, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 import TrustGauge from '@/components/TrustGauge';
 import EvidencePanel from '@/components/EvidencePanel';
 import RecommendationCard from '@/components/RecommendationCard';
@@ -31,7 +30,7 @@ export default function ResultsPage({ params }: ResultsPageProps) {
         setLoading(true);
         const report = await apiService.getScanResult(scanId);
         setScan(report);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
         setError('Failed to load security scan report. Record may have expired.');
       } finally {

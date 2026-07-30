@@ -6,10 +6,8 @@ import HistoryTable from '@/components/HistoryTable';
 import Skeleton from '@/components/Skeleton';
 import apiService from '@/services/api';
 import { AnalysisResult } from '@/types';
-import { useAuth } from '@/components/AuthProvider';
 
 export default function HistoryPage() {
-  const { user } = useAuth();
   const [scans, setScans] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,9 +17,9 @@ export default function HistoryPage() {
       try {
         setLoading(true);
         setError(null);
-        const data = await apiService.getHistory(user?.uid ?? null);
+        const data = await apiService.getHistory(null);
         setScans(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
         setError('Failed to fetch historical security scan records.');
       } finally {
@@ -29,10 +27,8 @@ export default function HistoryPage() {
       }
     };
 
-    if (user) {
-      fetchHistory();
-    }
-  }, [user]);
+    fetchHistory();
+  }, []);
 
   return (
     <div className="space-y-8 py-6">

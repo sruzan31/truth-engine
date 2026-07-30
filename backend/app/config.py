@@ -16,10 +16,6 @@ class Settings(BaseSettings):
     MONGODB_URI: str = Field(default="", env="MONGODB_URI")
     DATABASE_NAME: str = Field(default="truth_engine", env="DATABASE_NAME")
 
-    # Firebase Authentication
-    FIREBASE_SERVICE_ACCOUNT_PATH: str = Field(default="", env="FIREBASE_SERVICE_ACCOUNT_PATH")
-    FIREBASE_SERVICE_ACCOUNT_JSON: str = Field(default="", env="FIREBASE_SERVICE_ACCOUNT_JSON")
-
     # JWT Settings
     JWT_SECRET_KEY: str = Field(default="change_this_secret_in_production", env="JWT_SECRET_KEY")
     JWT_ALGORITHM: str = Field(default="HS256", env="JWT_ALGORITHM")

@@ -1,5 +1,6 @@
 import logging
 import io
+# pyrefly: ignore [missing-import]
 from PIL import Image
 from typing import List
 try:
@@ -32,6 +33,7 @@ class QrAnalyzer(BaseAnalyzer):
             
         decoded_text = None
         try:
+            # pyrefly: ignore [missing-import]
             from pyzbar.pyzbar import decode
             decoded_objects = decode(image)
             if decoded_objects:

@@ -138,8 +138,9 @@ export default function UploadCard({
         const res = await apiService.analyzeImage(selectedFile);
         onAnalysisSuccess(res);
       }
-    } catch (err: any) {
-      onError(err?.message || 'Verification request failed. Please check network connectivity.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Verification request failed. Please check network connectivity.';
+      onError(message);
     }
   };
 

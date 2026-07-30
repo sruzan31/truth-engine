@@ -23,7 +23,7 @@ class AnalysisResult(BaseModel):
     user_id: Optional[str] = Field(None, description="Optional user identifier")
 
 class UserProfile(BaseModel):
-    uid: str = Field(..., description="Firebase user identifier")
+    uid: str = Field(..., description="User identifier")
     name: str = Field(..., description="Full display name")
     email: str = Field(..., description="Primary email address")
     photoURL: str = Field(..., description="Google profile image URL")

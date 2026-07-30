@@ -7,13 +7,11 @@ import { Shield, AlertCircle, ArrowLeft } from 'lucide-react';
 import UploadCard from '@/components/UploadCard';
 import ProgressTimeline from '@/components/ProgressTimeline';
 import { AnalysisResult } from '@/types';
-import { useAuth } from '@/components/AuthProvider';
 
 export default function AnalyzePage() {
   const router = useRouter();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeTaskName, setActiveTaskName] = useState('Initiating Trust Engine Analysis...');
-  const { user } = useAuth();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
@@ -94,7 +92,7 @@ export default function AnalyzePage() {
                 <h2 className="mt-3 text-2xl font-semibold text-white">Upload, analyze, and secure content.</h2>
               </div>
               <span className="rounded-full bg-[#111827]/90 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-[#94A3B8]">
-                {user?.email ?? 'Authenticated session'}
+                Direct Session
               </span>
             </div>
             <p className="text-sm leading-7 text-[#CBD5E1]">
@@ -152,7 +150,7 @@ export default function AnalyzePage() {
                 onAnalysisStart={handleStart}
                 onAnalysisSuccess={handleSuccess}
                 onError={handleError}
-                userId={user?.uid ?? null}
+                userId={null}
               />
             </motion.div>
           ) : (
