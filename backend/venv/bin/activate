@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/ksruzanroy/Desktop/CrackWeb/backend/venv"
+VIRTUAL_ENV="/Users/ksruzanroy/Desktop/Dyno hub/truth-engine/backend/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

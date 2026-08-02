@@ -11,13 +11,11 @@ import { AnalysisResult } from '@/types';
 export default function AnalyzePage() {
   const router = useRouter();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [activeTaskName, setActiveTaskName] = useState('Initiating Trust Engine Analysis...');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
-  const handleStart = (taskName: string) => {
+  const handleStart = () => {
     setErrorMsg(null);
-    setActiveTaskName(taskName);
     setIsAnalyzing(true);
   };
 
@@ -162,7 +160,6 @@ export default function AnalyzePage() {
               transition={{ duration: 0.4 }}
             >
               <ProgressTimeline
-                initialTaskName={activeTaskName}
                 onComplete={handleProgressComplete}
               />
             </motion.div>

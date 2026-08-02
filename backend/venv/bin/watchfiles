@@ -1,4 +1,6 @@
-#!/Users/ksruzanroy/Desktop/CrackWeb/backend/venv/bin/python3
+#!/bin/sh
+'''exec' "/Users/ksruzanroy/Desktop/Dyno hub/truth-engine/backend/venv/bin/python3" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -8,10 +8,6 @@ import {
   XCircle,
   Info,
   ChevronDown,
-  Shield,
-  FileCode,
-  Lock,
-  Globe,
 } from 'lucide-react';
 import { EvidenceItem } from '@/types';
 

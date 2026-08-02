@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Globe,
   FileText,
@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   X,
   File,
-  Sparkles,
 } from 'lucide-react';
 import apiService from '@/services/api';
 import { AnalysisResult } from '@/types';

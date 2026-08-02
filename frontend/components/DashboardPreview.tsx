@@ -1,22 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import {
-  ShieldCheck,
-  AlertTriangle,
-  FileCheck,
-  Lock,
   Globe,
-  RefreshCw,
-  Search,
   CheckCircle2,
   ChevronRight,
-  TrendingUp,
 } from 'lucide-react';
 
 export default function DashboardPreview() {
-  const [activeTab, setActiveTab] = useState<'live' | 'signals'>('live');
 
   return (
     <div className="truth-card overflow-hidden bg-[#FFFFFF] border border-[#E8E8E8] shadow-[0_8px_30px_rgba(0,0,0,0.04)] rounded-2xl w-full">

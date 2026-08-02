@@ -4,11 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight,
   Shield,
-  UploadCloud,
   Cpu,
-  FileCheck2,
   Globe,
   Mail,
   Image as ImageIcon,
@@ -16,7 +13,6 @@ import {
   QrCode,
   Mic,
   Monitor,
-  CheckCircle,
   Eye,
   Lock,
   Zap,
@@ -96,18 +92,18 @@ export default function LandingPage() {
                 AI-powered digital trust intelligence for websites, emails, documents, images, QR codes, and audio with explainable, enterprise-grade analysis.
               </p>
             </div>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5 pt-2">
               <Link
                 href="/analyze"
-                className="inline-flex items-center justify-center rounded-full bg-[#3B82F6] px-8 py-4 text-sm font-semibold text-white shadow-[0_24px_80px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 hover:bg-[#2563EB]"
+                className="inline-flex items-center justify-center rounded-full bg-[#3B82F6] px-8 py-4 text-sm font-semibold text-white shadow-[0_24px_80px_rgba(59,130,246,0.25)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#2563EB] active:translate-y-0"
               >
                 Start Analyzing
               </Link>
               <Link
-                href="/login"
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold text-white/90 transition hover:bg-white/10"
+                href="/about"
+                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold text-white/90 transition duration-200 hover:bg-white/10 hover:border-white/25 hover:-translate-y-0.5 active:translate-y-0"
               >
-                Continue with Google
+                Learn More
               </Link>
             </div>
             <div className="grid gap-3 sm:grid-cols-3 text-xs text-[#94A3B8]">

@@ -18,28 +18,54 @@ export default function DashboardPage() {
   const [scans, setScans] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [statsData, historyData] = await Promise.all([
+        apiService.getDashboardStats(null),
+        apiService.getHistory(null),
+      ]);
+      setStats(statsData);
+      setScans(historyData);
+    } catch (err: unknown) {
+      console.error('Failed to fetch dashboard data:', err);
+      setError('Service temporarily unavailable.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const [statsData, historyData] = await Promise.all([
-          apiService.getDashboardStats(null),
-          apiService.getHistory(null),
-        ]);
-        setStats(statsData);
-        setScans(historyData);
-      } catch (err: unknown) {
-        console.error(err);
-        setError('Failed to fetch dashboard telemetry records.');
-      } finally {
-        setLoading(false);
+    let active = true;
+    const init = async () => {
+      await Promise.resolve();
+      if (active) {
+        fetchDashboardData();
       }
     };
+    init();
+    return () => {
+      active = false;
+    };
+  }, [retryCount]);
 
-    fetchDashboardData();
-  }, []);
+  // Automatic retry on connectivity issues after 10 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        console.warn('Auto-retrying connection to dashboard services...');
+        setRetryCount((prev) => prev + 1);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const handleRetry = () => {
+    setRetryCount((prev) => prev + 1);
+  };
 
   const lowRiskCount = stats?.risk_breakdown.low || 0;
   const threatCount =
@@ -81,9 +107,26 @@ export default function DashboardPage() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-[#FFEBEE] border border-[#FFCDD2] text-[#C62828] text-xs font-medium flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
+        <div className="p-6 rounded-2xl bg-[#7F1D1D]/10 border border-[#F87171]/20 space-y-4 max-w-xl mx-auto text-center shadow-lg">
+          <div className="flex flex-col items-center gap-2">
+            <AlertTriangle className="w-8 h-8 text-[#F87171] animate-bounce" />
+            <h3 className="text-base font-bold text-white font-mono">Service Temporarily Unavailable</h3>
+            <p className="text-xs text-[#CBD5E1] max-w-md leading-relaxed">
+              We are unable to establish a secure link with the trust intelligence engine. The server may be offline or performing updates.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={handleRetry}
+              disabled={loading}
+              className="px-5 py-2.5 rounded-full bg-white text-[#111827] text-xs font-semibold hover:bg-[#E2E8F0] disabled:opacity-50 transition-all shadow-md active:scale-95 cursor-pointer"
+            >
+              {loading ? 'Connecting...' : 'Retry Connection'}
+            </button>
+            <span className="text-[10px] text-[#94A3B8] font-mono animate-pulse">
+              Retrying automatically in 10s...
+            </span>
+          </div>
         </div>
       )}
 

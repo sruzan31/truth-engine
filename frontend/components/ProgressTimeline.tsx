@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Check, Loader2, Cpu, Database, FileSearch, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Shield, Check, Cpu, Database, FileSearch, Lock } from 'lucide-react';
 
 interface ProgressTimelineProps {
-  initialTaskName?: string;
   onComplete?: () => void;
 }
 
@@ -18,7 +17,7 @@ const STAGES = [
   { id: 'verdict', label: 'Calculating Trust Score & generating report...', icon: Shield, duration: 700 },
 ];
 
-export default function ProgressTimeline({ initialTaskName, onComplete }: ProgressTimelineProps) {
+export default function ProgressTimeline({ onComplete }: ProgressTimelineProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   useEffect(() => {
@@ -84,7 +83,6 @@ export default function ProgressTimeline({ initialTaskName, onComplete }: Progre
         {STAGES.map((stage, idx) => {
           const isDone = idx < currentStepIndex;
           const isCurrent = idx === currentStepIndex;
-          const isPending = idx > currentStepIndex;
 
           return (
             <motion.div

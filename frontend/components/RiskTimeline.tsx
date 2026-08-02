@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Clock, AlertTriangle } from 'lucide-react';
 
 interface RiskTimelineItem {
   time: string;

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Search, ChevronRight, Filter, ShieldCheck, ShieldAlert, ArrowUpRight } from 'lucide-react';
+import { Search, ArrowUpRight } from 'lucide-react';
 import { AnalysisResult } from '@/types';
 import { formatDate } from '@/lib/utils';
 

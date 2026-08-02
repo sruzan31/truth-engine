@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, ShieldAlert, Shield, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Shield, AlertTriangle } from 'lucide-react';
 
 interface TrustGaugeProps {
   score: number;

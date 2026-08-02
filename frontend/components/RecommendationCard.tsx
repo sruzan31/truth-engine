@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Download, Share2, Shield, ArrowRight, CheckCircle2, AlertOctagon } from 'lucide-react';
+import { Download, Share2, CheckCircle2, AlertOctagon } from 'lucide-react';
 
 interface RecommendationCardProps {
   reasoning: string;

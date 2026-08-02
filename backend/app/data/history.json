@@ -2466,5 +2466,59 @@
     ],
     "created_at": "2026-07-22T16:43:10.903946Z",
     "user_id": null
+  },
+  {
+    "scan_id": "506174c8-b8b5-42b2-a96d-0b278296bdf3",
+    "scan_type": "url",
+    "target": "https://google.com",
+    "trust_score": 100.0,
+    "risk_level": "low",
+    "confidence_score": 90.0,
+    "reasoning": "The website shows strong credibility indicators, including an established domain authority, active high-quality SSL certificate, and zero listings on prominent security threat databases.",
+    "recommendation": "This website appears safe for standard use. You can interact with it safely.",
+    "evidence": [
+      {
+        "category": "Security",
+        "title": "HTTPS Protocol",
+        "description": "The website uses secure, encrypted HTTPS transmission.",
+        "status": "success",
+        "weight": 0.15,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "URL Heuristics",
+        "description": "No suspicious URL heuristic patterns detected.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Reputation",
+        "title": "Domain Registration Age",
+        "description": "Domain is established. Registration age is 10548 days (approx. 28 years).",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "VirusTotal Threat Intelligence",
+        "description": "VirusTotal report (Simulated): 0 engines flag this URL as malicious.",
+        "status": "success",
+        "weight": 0.25,
+        "score": 100.0
+      },
+      {
+        "category": "Security",
+        "title": "Google Safe Browsing",
+        "description": "Google Safe Browsing (Simulated): URL is clean.",
+        "status": "success",
+        "weight": 0.2,
+        "score": 100.0
+      }
+    ],
+    "created_at": "2026-08-02T11:46:56.647544Z",
+    "user_id": null
   }
 ]

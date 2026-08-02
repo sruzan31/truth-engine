@@ -1,4 +1,4 @@
-#!/Users/ksruzanroy/Desktop/CrackWeb/backend/venv/bin/python3
+#!/Users/ksruzanroy/Desktop/Dyno hub/truth-engine/backend/venv/bin/python3
 from __future__ import print_function
 
 import argparse

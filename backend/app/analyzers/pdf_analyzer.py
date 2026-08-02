@@ -71,7 +71,7 @@ class PdfAnalyzer(BaseAnalyzer):
         
         return evidence
         
-    def _extract_metadata(self, doc: fitz.Document) -> EvidenceItem:
+    def _extract_metadata(self, doc: "fitz.Document") -> EvidenceItem:
         meta = doc.metadata or {}
         details = [f"PDF contains {len(doc)} page(s)."]
         score = 100.0
