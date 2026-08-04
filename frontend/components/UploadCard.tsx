@@ -158,6 +158,8 @@ export default function UploadCard({
                 setSelectedFile(null);
               }}
               type="button"
+              aria-label={`Select ${tab.label} category`}
+              aria-pressed={isActive}
               className={`relative px-4 py-2 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-2 ${
                 isActive
                   ? 'text-[#111111] font-semibold'
@@ -305,6 +307,7 @@ export default function UploadCard({
                   <button
                     type="button"
                     onClick={() => setSelectedFile(null)}
+                    aria-label="Remove selected file"
                     className="p-1.5 rounded-full hover:bg-[#E8E8E8] text-[#666666] transition-colors"
                   >
                     <X className="w-4 h-4" />
