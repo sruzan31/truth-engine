@@ -89,6 +89,8 @@ export default function EvidencePanel({ evidence }: EvidencePanelProps) {
               <button
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
+                aria-expanded={isOpen}
+                aria-controls={`evidence-panel-${idx}`}
                 className="w-full p-4 flex items-center justify-between text-left bg-[#FAFAFA] hover:bg-[#F6F6F7] transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0 pr-4">
@@ -116,6 +118,7 @@ export default function EvidencePanel({ evidence }: EvidencePanelProps) {
               <AnimatePresence>
                 {isOpen && (
                   <motion.div
+                    id={`evidence-panel-${idx}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
