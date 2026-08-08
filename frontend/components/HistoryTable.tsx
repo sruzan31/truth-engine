@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, ArrowUpRight } from 'lucide-react';
 import { AnalysisResult } from '@/types';
@@ -15,15 +15,19 @@ export default function HistoryTable({ scans }: HistoryTableProps) {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedRisk, setSelectedRisk] = useState<string>('all');
 
-  const filteredScans = scans.filter((scan) => {
-    const matchesSearch =
-      scan.target.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scan.scan_id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === 'all' || scan.scan_type === selectedType;
-    const matchesRisk = selectedRisk === 'all' || scan.risk_level === selectedRisk;
+  // ⚡ Bolt Optimization: Memoize the filtered scans array to prevent expensive O(n) filtering
+  // calculations on every re-render when non-filter state changes or parent re-renders.
+  const filteredScans = useMemo(() => {
+    return scans.filter((scan) => {
+      const matchesSearch =
+        scan.target.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        scan.scan_id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = selectedType === 'all' || scan.scan_type === selectedType;
+      const matchesRisk = selectedRisk === 'all' || scan.risk_level === selectedRisk;
 
-    return matchesSearch && matchesType && matchesRisk;
-  });
+      return matchesSearch && matchesType && matchesRisk;
+    });
+  }, [scans, searchTerm, selectedType, selectedRisk]);
 
   const getRiskBadge = (level: AnalysisResult['risk_level']) => {
     switch (level) {
